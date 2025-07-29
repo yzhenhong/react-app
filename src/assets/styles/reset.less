@@ -1,0 +1,94 @@
+/* Reset默认样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* HTML5元素显示为块级 */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section {
+  display: block;
+}
+
+/* 基础HTML元素样式重置 */
+html,
+body {
+  height: 100%;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+/* 列表样式重置 */
+ol,
+ul {
+  list-style: none;
+}
+
+/* 链接样式重置 */
+a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* 表格边框重置 */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* 表单元素重置 */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* 图片样式重置 */
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+  border-style: none;
+}
+
+/* 样式重置 */
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  vertical-align: middle;
+}
+
+/* 清除浮动 */
+.clearfix::after {
+  content: '';
+  display: table;
+  clear: both;
+}

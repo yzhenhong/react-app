@@ -1,0 +1,57 @@
+// 通用样式文件 - 包含变量和常用样式
+// 这个文件可以被所有组件导入使用
+
+// 导入全局变量
+@import './variables.less';
+
+// 常用工具类
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+// 常用间距类
+.mt-base {
+  margin-top: @margin-base;
+}
+.mb-base {
+  margin-bottom: @margin-base;
+}
+.ml-base {
+  margin-left: @margin-base;
+}
+.mr-base {
+  margin-right: @margin-base;
+}
+
+.pt-base {
+  padding-top: @padding-base;
+}
+.pb-base {
+  padding-bottom: @padding-base;
+}
+.pl-base {
+  padding-left: @padding-base;
+}
+.pr-base {
+  padding-right: @padding-base;
+}

@@ -1,0 +1,106 @@
+// 导入通用样式（包含变量）
+@import '@/assets/styles/common.less';
+
+// 测试样式 - 使用全局变量
+.test-less-container {
+  background-color: @primary-color !important;
+  border: 3px solid @success-color !important;
+  padding: @padding-base !important;
+  margin: @margin-base !important;
+  color: white !important;
+  font-size: @font-size-lg !important;
+  text-align: center !important;
+  border-radius: @border-radius-base !important;
+  box-shadow: @box-shadow-base !important;
+
+  .test-title {
+    color: @success-color !important;
+    font-size: 24px !important;
+    font-weight: bold !important;
+    margin-bottom: @margin-base !important;
+  }
+
+  .test-text {
+    color: @text-color !important;
+    font-size: @font-size-base !important;
+    margin-bottom: @margin-base !important;
+  }
+
+  .test-button {
+    background-color: @warning-color !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    border: none !important;
+    border-radius: @border-radius-base !important;
+    font-size: @font-size-base !important;
+    cursor: pointer !important;
+
+    &:hover {
+      background-color: darken(@warning-color, 10%) !important;
+    }
+  }
+}
+
+// 测试容器样式
+.test-less-container {
+  padding: 20px;
+  margin: 20px;
+  border: 2px solid @primary-color;
+  border-radius: @border-radius-base;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+
+  // 嵌套样式
+  .test-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+    color: @success-color;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .test-text {
+    font-size: @font-size-base;
+    margin-bottom: 16px;
+    line-height: 1.6;
+    color: #f0f0f0;
+  }
+
+  .test-button {
+    background-color: @primary-color;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: @border-radius-base;
+    font-size: @font-size-base;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: darken(@primary-color, 10%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .test-less-container {
+    margin: 10px;
+    padding: 15px;
+
+    .test-title {
+      font-size: 20px;
+    }
+
+    .test-text {
+      font-size: 13px;
+    }
+  }
+}

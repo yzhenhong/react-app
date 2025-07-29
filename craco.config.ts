@@ -1,21 +1,31 @@
-/*
- * @Author: yangzhenhong
- * @Date: 2025-07-29 13:56:20
- * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-29 14:16:30
- * @FilePath: \react-app\craco.config.ts
- * @Description: CRACO 配置文件 - 用于自定义 Create React App 的构建配置
+/**
+ * CRACO 配置文件
+ *
+ * CRACO (Create React App Configuration Override) 用于自定义 Create React App 的配置
+ * 无需 eject 即可修改 webpack、Babel、Jest 和 ESLint 配置
+ *
+ * 主要功能：
+ * - 配置路径别名 (@/ 指向 src/)
+ * - 集成 Less 预处理器
+ * - 配置 ESLint
+ * - 配置 Jest 测试环境
+ * - ...
  */
 
 import path from 'path';
+// @ts-ignore - craco-less 没有 TypeScript 声明文件
+import CracoLessPlugin from 'craco-less';
 
 const cracoConfig = {
+  // Webpack 配置
   webpack: {
+    // 路径别名配置 - 简化导入路径
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
   },
-  // 添加 Jest 配置，使测试环境也能识别路径别名
+
+  // Jest 测试配置 - 使测试环境也能识别路径别名
   jest: {
     configure: {
       moduleNameMapping: {
@@ -23,6 +33,27 @@ const cracoConfig = {
       },
     },
   },
+
+  // ESLint 配置 - 集成到构建流程中
+  eslint: {
+    enable: true, // 启用 ESLint
+    mode: 'extends', // 扩展现有配置
+  },
+
+  // 插件配置
+  plugins: [
+    // Less 预处理器插件
+    {
+      plugin: CracoLessPlugin,
+      options: {
+        lessLoaderOptions: {
+          lessOptions: {
+            javascriptEnabled: true, // 启用 Less 中的 JavaScript 表达式
+          },
+        },
+      },
+    },
+  ],
 };
 
 export default cracoConfig;

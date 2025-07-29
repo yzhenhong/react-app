@@ -2,15 +2,15 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-29 11:49:57
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-29 14:46:39
+ * @LastEditTime: 2025-07-29 15:16:37
  * @FilePath: \react-app\src\index.tsx
- * @Description: 
+ * @Description:
  */
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from '@/reportWebVitals';
-import '@/assets/styles/index.css';
+import '@/assets/styles/index.less';
 import App from '@/App';
 
 const root = ReactDOM.createRoot(

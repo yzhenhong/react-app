@@ -4,7 +4,7 @@
  * @LastEditors: yangzhenhong
  * @LastEditTime: 2025-07-29 14:14:35
  * @FilePath: \react-app\src\__tests__\App.test.tsx
- * @Description: 
+ * @Description:
  */
 
 import React from 'react';
