@@ -1,6 +1,15 @@
+/*
+ * @Author: yangzhenhong
+ * @Date: 2025-07-29 11:49:57
+ * @LastEditors: yangzhenhong
+ * @LastEditTime: 2025-07-29 13:45:12
+ * @FilePath: \react-app\src\App.tsx
+ * @Description: 
+ */
+
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import logo from './assets/images/logo.svg';
+import './assets/styles/App.css';
 
 function App() {
   return (
