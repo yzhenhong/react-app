@@ -2,17 +2,16 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-29 16:25:51
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-29 16:26:36
+ * @LastEditTime: 2025-07-29 17:29:26
  * @FilePath: \react-app\src\router\index.tsx
  * @Description:
  */
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-// 页面组件
+// 页面
 import Welcome from '@/pages/welcome';
 import News from '@/pages/news';
-import Navigation from '@/components/Navigation';
 
 /**
  * 路由配置
@@ -26,7 +25,6 @@ import Navigation from '@/components/Navigation';
 const AppRouter: React.FC = () => {
   return (
     <BrowserRouter>
-      <Navigation />
       <Routes>
         {/* 默认路由重定向到欢迎页面 */}
         <Route path='/' element={<Navigate to='/welcome' replace />} />
