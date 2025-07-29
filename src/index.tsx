@@ -2,16 +2,16 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-29 11:49:57
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-29 14:03:31
+ * @LastEditTime: 2025-07-29 14:46:39
  * @FilePath: \react-app\src\index.tsx
  * @Description: 
  */
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import reportWebVitals from '@/reportWebVitals';
 import '@/assets/styles/index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import App from '@/App';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
