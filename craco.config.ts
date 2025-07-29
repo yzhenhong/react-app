@@ -2,14 +2,12 @@
  * CRACO 配置文件
  *
  * CRACO (Create React App Configuration Override) 用于自定义 Create React App 的配置
- * 无需 eject 即可修改 webpack、Babel、Jest 和 ESLint 配置
+ * 无需 eject 即可修改 webpack、Babel 和 ESLint 配置
  *
  * 主要功能：
  * - 配置路径别名 (@/ 指向 src/)
  * - 集成 Less 预处理器
  * - 配置 ESLint
- * - 配置 Jest 测试环境
- * - ...
  */
 
 import path from 'path';
@@ -22,15 +20,6 @@ const cracoConfig = {
     // 路径别名配置 - 简化导入路径
     alias: {
       '@': path.resolve(__dirname, 'src'),
-    },
-  },
-
-  // Jest 测试配置 - 使测试环境也能识别路径别名
-  jest: {
-    configure: {
-      moduleNameMapping: {
-        '^@/(.*)$': '<rootDir>/src/$1',
-      },
     },
   },
 

@@ -1,10 +1,10 @@
-/*
- * @Author: yangzhenhong
- * @Date: 2025-07-29 11:49:57
- * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-29 15:16:37
- * @FilePath: \react-app\src\index.tsx
- * @Description:
+/**
+ * 应用程序入口文件
+ *
+ * 主要功能：
+ * - 渲染 React 应用根组件
+ * - 导入全局样式
+ * - 性能监控配置
  */
 
 import React from 'react';
