@@ -1,0 +1,137 @@
+// 导入通用样式（包含变量）
+@import '@/assets/styles/common.less';
+
+.counter-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: @padding-lg;
+  background: @background-color-light;
+  border-radius: @border-radius-base;
+  box-shadow: @box-shadow-base;
+
+  .counter-title {
+    color: @primary-color;
+    font-size: @font-size-xl;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: @margin-lg;
+  }
+
+  .counter-display {
+    text-align: center;
+    margin-bottom: @margin-lg;
+
+    .counter-value {
+      font-size: @font-size-xxl;
+      font-weight: bold;
+      color: @text-color;
+      padding: @padding-md;
+      background: white;
+      border-radius: @border-radius-base;
+      border: 2px solid @primary-color;
+    }
+  }
+
+  .counter-controls {
+    display: flex;
+    justify-content: center;
+    gap: @margin-sm;
+    margin-bottom: @margin-lg;
+
+    .counter-btn {
+      padding: @padding-sm @padding-md;
+      font-size: @font-size-base;
+      border: 1px solid @border-color-base;
+      border-radius: @border-radius-base;
+      background: white;
+      color: @text-color;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: @primary-color;
+        color: white;
+        border-color: @primary-color;
+      }
+
+      &.reset {
+        background: @warning-color;
+        color: white;
+        border-color: @warning-color;
+
+        &:hover {
+          background: darken(@warning-color, 10%);
+        }
+      }
+    }
+  }
+
+  .counter-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: @margin-sm;
+    margin-bottom: @margin-lg;
+
+    .counter-input-field {
+      padding: @padding-sm;
+      font-size: @font-size-base;
+      border: 1px solid @border-color-base;
+      border-radius: @border-radius-base;
+      width: 80px;
+      text-align: center;
+
+      &:focus {
+        outline: none;
+        border-color: @primary-color;
+      }
+    }
+  }
+
+  .counter-history {
+    h3 {
+      color: @text-color;
+      font-size: @font-size-lg;
+      margin-bottom: @margin-md;
+      text-align: center;
+    }
+
+    .history-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: @margin-xs;
+      justify-content: center;
+      align-items: center;
+
+      .no-history {
+        color: @text-color-secondary;
+        font-style: italic;
+      }
+
+      .history-item {
+        padding: @padding-xs @padding-sm;
+        background: @primary-color;
+        color: white;
+        border-radius: @border-radius-base;
+        font-size: @font-size-sm;
+        min-width: 30px;
+        text-align: center;
+      }
+
+      .clear-history-btn {
+        padding: @padding-xs @padding-sm;
+        font-size: @font-size-sm;
+        border: 1px solid @error-color;
+        border-radius: @border-radius-base;
+        background: @error-color;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: darken(@error-color, 10%);
+        }
+      }
+    }
+  }
+}

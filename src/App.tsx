@@ -4,16 +4,21 @@
  * 主要功能：
  * - 提供应用程序的根容器
  * - 集成路由系统
+ * - 集成 Redux 状态管理
  */
 
 import React from 'react';
+import { Provider } from 'react-redux';
+import { store } from '@/store';
 import AppRouter from '@/router';
 
 function App() {
   return (
-    <div className='App'>
-      <AppRouter />
-    </div>
+    <Provider store={store}>
+      <div className='App'>
+        <AppRouter />
+      </div>
+    </Provider>
   );
 }
 
