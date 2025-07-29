@@ -18,7 +18,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    // 指定基础目录
+    "baseUrl": ".",
+    // 配置路径别名
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": [
     "src"
