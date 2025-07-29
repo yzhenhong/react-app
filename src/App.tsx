@@ -1,31 +1,18 @@
-/*
- * @Author: yangzhenhong
- * @Date: 2025-07-29 11:49:57
- * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-29 15:28:27
- * @FilePath: \react-app\src\App.tsx
- * @Description:
+/**
+ * 应用程序根组件
+ *
+ * 主要功能：
+ * - 提供应用程序的根容器
+ * - 集成路由系统
  */
 
-import TestLess from '@/components/TestLess';
+import React from 'react';
+import AppRouter from '@/router';
 
 function App() {
   return (
     <div className='App'>
-      <h1>Hello World</h1>
-      <TestLess />
-      <div
-        style={{
-          backgroundColor: 'green',
-          padding: '20px',
-          margin: '20px',
-          color: 'white',
-          textAlign: 'center',
-        }}
-      >
-        <h2>内联样式测试（绿色背景）</h2>
-        <p>如果你看到这个绿色背景，说明 React 正常工作</p>
-      </div>
+      <AppRouter />
     </div>
   );
 }

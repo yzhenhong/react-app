@@ -1,0 +1,23 @@
+// 导入通用样式（包含变量）
+@import '@/assets/styles/common.less';
+
+.welcome-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: @padding-lg;
+  text-align: center;
+
+  h1 {
+    color: @primary-color;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: @margin-lg;
+  }
+
+  p {
+    color: @text-color;
+    font-size: @font-size-lg;
+    line-height: 1.6;
+    margin-bottom: @margin-md;
+  }
+}

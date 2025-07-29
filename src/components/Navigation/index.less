@@ -1,0 +1,64 @@
+// 导入通用样式（包含变量）
+@import '@/assets/styles/common.less';
+
+.navigation {
+  background: @background-color-light;
+  border-bottom: 1px solid @border-color-base;
+  box-shadow: @box-shadow-base;
+
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 @padding-lg;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+
+    .nav-brand {
+      a {
+        color: @primary-color;
+        font-size: @font-size-lg;
+        font-weight: bold;
+        text-decoration: none;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: darken(@primary-color, 10%);
+        }
+      }
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      .nav-item {
+        margin-left: @margin-lg;
+
+        a {
+          color: @text-color;
+          text-decoration: none;
+          padding: @padding-sm @padding-md;
+          border-radius: @border-radius-base;
+          transition: all 0.3s ease;
+
+          &:hover {
+            color: @primary-color;
+            background: rgba(@primary-color, 0.1);
+          }
+        }
+
+        &.active {
+          a {
+            color: @primary-color;
+            background: rgba(@primary-color, 0.1);
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}
