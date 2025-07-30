@@ -11,7 +11,6 @@
 - 💅 **Prettier** - 代码格式化工具
 - ⚡ **CRACO** - Create React App 配置覆盖工具
 - 🛣️ **React Router** - 单页面应用路由管理
-- 📦 **路径别名** - 支持 `@` 路径别名
 - 🎨 **Less** - CSS 预处理器支持
 
 ## 📋 目录结构
@@ -137,7 +136,6 @@ npm run code:fix          # 同时运行 ESLint 自动修复和 Prettier 格式�
 **主要功能：**
 - 配置路径别名 `@` 指向 `src` 目录
 - 集成 ESLint 配置
-- Jest 测试环境支持路径别名
 - Less 样式预处理器支持
 
 ### Less 配置
@@ -240,28 +238,6 @@ npm run build
 
 构建完成后，可以将 `build/` 目录部署到任何静态文件服务器。
 
-## 🤝 贡献指南
-
-1. Fork 项目
-2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 打开 Pull Request
-
-## 📝 更新日志
-
-### v0.1.0 (2025-07-29)
-- 初始化项目
-- 集成 TypeScript
-- 配置 ESLint 和 Prettier
-- 集成 Ant Design
-- 配置 CRACO
-- 添加 VS Code 配置
-- 移除测试相关配置（专注于核心开发功能）
-
-## 📄 许可证
-
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
 
 ## 🆘 常见问题
 
@@ -274,16 +250,6 @@ A: 修改 `.prettierrc` 文件中的配置项。
 ### Q: 如何添加新的路径别名？
 A: 在 `craco.config.ts` 文件的 `webpack.alias` 部分添加新的别名。
 
-
-
-## 📞 联系方式
-
-如有问题或建议，请通过以下方式联系：
-
-- 项目 Issues: [GitHub Issues](https://github.com/your-repo/issues)
-- 邮箱: your-email@example.com
-
----
 
 **Happy Coding! 🎉**
 
@@ -313,42 +279,6 @@ A: 在 `craco.config.ts` 文件的 `webpack.alias` 部分添加新的别名。
 - **语法**：`<Navigate to="目标路径" replace />`
 - **特点**：`replace` 属性会替换当前历史记录，不会留下返回痕迹
 
-### 当前路由配置
-
-```typescript
-// src/router/index.tsx
-const AppRouter: React.FC = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        {/* 默认路由重定向到欢迎页面 */}
-        <Route path='/' element={<Navigate to='/welcome' replace />} />
-
-        {/* 使用默认布局的路由组 */}
-        <Route element={<LayoutDefault />}>
-          {/* 欢迎页面 - 使用默认布局 */}
-          <Route path='welcome' element={<Welcome />} />
-
-          {/* 路由演示页面 - 使用默认布局 */}
-          <Route path='router-demo' element={<RouterDemo />} />
-
-          {/* 布局演示页面 - 使用默认布局 */}
-          <Route path='layout-demo' element={<LayoutDemo />} />
-        </Route>
-
-        {/* 使用空白布局的路由组 */}
-        <Route element={<LayoutBlank />}>
-          {/* 新闻页面 - 使用空白布局 */}
-          <Route path='news' element={<News />} />
-        </Route>
-
-        {/* 404 页面 - 重定向到欢迎页面 */}
-        <Route path='*' element={<Navigate to='/welcome' replace />} />
-      </Routes>
-    </BrowserRouter>
-  );
-};
-```
 
 ### 布局系统说明
 
@@ -371,34 +301,6 @@ const AppRouter: React.FC = () => {
 
 ### 路由使用示例
 
-#### 0. 嵌套路由演示页面
-项目包含一个完整的嵌套路由演示页面，展示了不同布局的使用方法：
-
-```bash
-# 访问演示页面
-http://localhost:3000/layout-demo
-```
-
-演示页面包含：
-- 不同布局的说明和对比
-- 页面导航示例
-- 嵌套路由工作原理
-- 代码示例展示
-
-#### 1. 路由演示页面
-项目包含一个完整的路由演示页面，展示了所有 React Router 组件的使用方法：
-
-```bash
-# 访问演示页面
-http://localhost:3000/router-demo
-```
-
-演示页面包含：
-- 当前路由信息显示
-- Link 组件使用示例
-- useNavigate Hook 使用示例
-- 详细的路由组件说明
-- 实际应用场景展示
 
 #### 1. 基本页面导航
 ```typescript
