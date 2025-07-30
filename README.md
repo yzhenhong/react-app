@@ -10,7 +10,7 @@
 - 🔧 **ESLint** - 代码质量检查和规范
 - 💅 **Prettier** - 代码格式化工具
 - ⚡ **CRACO** - Create React App 配置覆盖工具
-
+- 🛣️ **React Router** - 单页面应用路由管理
 - 📦 **路径别名** - 支持 `@` 路径别名
 - 🎨 **Less** - CSS 预处理器支持
 
@@ -286,3 +286,169 @@ A: 在 `craco.config.ts` 文件的 `webpack.alias` 部分添加新的别名。
 ---
 
 **Happy Coding! 🎉**
+
+## 🛣️ React Router 路由系统
+
+### 核心组件说明
+
+项目使用 React Router v6 进行路由管理，主要包含以下核心组件：
+
+#### 1. **BrowserRouter** - 路由器容器
+- **作用**：整个路由系统的容器，使用浏览器的 History API 管理 URL
+- **特点**：URL 看起来像正常的网站地址（如 `http://localhost:3000/welcome`）
+- **使用场景**：必须包裹整个应用的路由系统
+
+#### 2. **Routes** - 路由规则集合
+- **作用**：包含所有路由规则的容器，相当于应用的"路线图"
+- **特点**：所有的 Route 组件都必须放在 Routes 里面
+- **功能**：根据当前 URL 匹配最合适的路由规则
+
+#### 3. **Route** - 单个路由规则
+- **作用**：定义具体的路由规则，指定"访问某个路径时显示哪个组件"
+- **语法**：`<Route path="路径" element={<组件 />} />`
+- **特点**：支持嵌套路由和动态参数
+
+#### 4. **Navigate** - 页面重定向
+- **作用**：自动跳转到指定路径，常用于默认路由和 404 处理
+- **语法**：`<Navigate to="目标路径" replace />`
+- **特点**：`replace` 属性会替换当前历史记录，不会留下返回痕迹
+
+### 当前路由配置
+
+```typescript
+// src/router/index.tsx
+const AppRouter: React.FC = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* 默认路由重定向到欢迎页面 */}
+        <Route path='/' element={<Navigate to='/welcome' replace />} />
+
+        {/* 使用默认布局的路由组 */}
+        <Route element={<LayoutDefault />}>
+          {/* 欢迎页面 - 使用默认布局 */}
+          <Route path='welcome' element={<Welcome />} />
+
+          {/* 路由演示页面 - 使用默认布局 */}
+          <Route path='router-demo' element={<RouterDemo />} />
+
+          {/* 布局演示页面 - 使用默认布局 */}
+          <Route path='layout-demo' element={<LayoutDemo />} />
+        </Route>
+
+        {/* 使用空白布局的路由组 */}
+        <Route element={<LayoutBlank />}>
+          {/* 新闻页面 - 使用空白布局 */}
+          <Route path='news' element={<News />} />
+        </Route>
+
+        {/* 404 页面 - 重定向到欢迎页面 */}
+        <Route path='*' element={<Navigate to='/welcome' replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+```
+
+### 布局系统说明
+
+项目实现了嵌套路由布局系统，支持不同的页面使用不同的布局：
+
+#### 1. **默认布局 (LayoutDefault)**
+- **特点**：包含导航栏和页脚的完整布局
+- **适用页面**：`/welcome`, `/router-demo`, `/layout-demo`
+- **样式**：浅色背景，白色内容区域，包含导航和页脚
+
+#### 2. **空白布局 (LayoutBlank)**
+- **特点**：不包含导航栏和页脚的简洁布局
+- **适用页面**：`/news`
+- **样式**：黑色背景，白色文字，全屏展示
+
+#### 3. **嵌套路由工作原理**
+- 使用 `Outlet` 组件渲染子路由内容
+- 布局组件作为父路由，页面组件作为子路由
+- 自动根据路由路径应用对应的布局样式
+
+### 路由使用示例
+
+#### 0. 嵌套路由演示页面
+项目包含一个完整的嵌套路由演示页面，展示了不同布局的使用方法：
+
+```bash
+# 访问演示页面
+http://localhost:3000/layout-demo
+```
+
+演示页面包含：
+- 不同布局的说明和对比
+- 页面导航示例
+- 嵌套路由工作原理
+- 代码示例展示
+
+#### 1. 路由演示页面
+项目包含一个完整的路由演示页面，展示了所有 React Router 组件的使用方法：
+
+```bash
+# 访问演示页面
+http://localhost:3000/router-demo
+```
+
+演示页面包含：
+- 当前路由信息显示
+- Link 组件使用示例
+- useNavigate Hook 使用示例
+- 详细的路由组件说明
+- 实际应用场景展示
+
+#### 1. 基本页面导航
+```typescript
+import { Link } from 'react-router-dom';
+
+const Navigation: React.FC = () => {
+  return (
+    <nav>
+      <Link to="/welcome">欢迎页面</Link>
+      <Link to="/news">新闻页面</Link>
+    </nav>
+  );
+};
+```
+
+#### 2. 编程式导航
+```typescript
+import { useNavigate } from 'react-router-dom';
+
+const LoginButton: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    // 登录成功后跳转到欢迎页面
+    navigate('/welcome');
+  };
+
+  return <button onClick={handleLogin}>登录</button>;
+};
+```
+
+#### 3. 获取当前路由信息
+```typescript
+import { useLocation } from 'react-router-dom';
+
+const CurrentPage: React.FC = () => {
+  const location = useLocation();
+
+  return (
+    <div>
+      当前页面: {location.pathname}
+    </div>
+  );
+};
+```
+
+### 路由最佳实践
+
+1. **路由结构清晰**：按功能模块组织路由
+2. **默认重定向**：为根路径设置合理的默认页面
+3. **404 处理**：为不存在的路径提供友好的处理方式
+4. **路由守卫**：在需要时添加权限验证
+5. **懒加载**：对大型页面组件使用 React.lazy 进行代码分割

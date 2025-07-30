@@ -7,13 +7,25 @@
  * @Description:
  */
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
-const LayoutDefault: React.FC = () => {
+import './default.less';
+
+interface LayoutDefaultProps {
+  children?: React.ReactNode;
+}
+
+const LayoutDefault: React.FC<LayoutDefaultProps> = ({ children }) => {
   return (
     <div className='layout-default'>
       <Nav />
-      <div>layout-default</div>
+      <main className='layout-content'>
+        {/* 使用 Outlet 渲染嵌套路由的子组件 */}
+        <Outlet />
+        {/* 如果没有嵌套路由，则渲染 children */}
+        {children}
+      </main>
       <Footer />
     </div>
   );

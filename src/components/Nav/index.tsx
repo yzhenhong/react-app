@@ -1,3 +1,11 @@
+/*
+ * @Author: yangzhenhong
+ * @Date: 2025-07-29 16:47:56
+ * @LastEditors: yangzhenhong
+ * @LastEditTime: 2025-07-30 15:02:42
+ * @FilePath: \react-app\src\components\Nav\index.tsx
+ * @Description:
+ */
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './index.less';
@@ -26,6 +34,19 @@ const Navigation: React.FC = () => {
         >
           <Link to='/welcome'>欢迎</Link>
         </li>
+
+        <li
+          className={`nav-item ${location.pathname === '/router-demo' ? 'active' : ''}`}
+        >
+          <Link to='/router-demo'>路由演示</Link>
+        </li>
+
+        <li
+          className={`nav-item ${location.pathname === '/layout-demo' ? 'active' : ''}`}
+        >
+          <Link to='/layout-demo'>布局演示</Link>
+        </li>
+
         <li
           className={`nav-item ${location.pathname === '/news' ? 'active' : ''}`}
         >
