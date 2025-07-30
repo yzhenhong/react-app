@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-29 16:47:56
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-30 15:02:42
+ * @LastEditTime: 2025-07-30 15:57:27
  * @FilePath: \react-app\src\components\Nav\index.tsx
  * @Description:
  */
@@ -33,6 +33,12 @@ const Navigation: React.FC = () => {
           className={`nav-item ${location.pathname === '/welcome' ? 'active' : ''}`}
         >
           <Link to='/welcome'>欢迎</Link>
+        </li>
+
+        <li
+          className={`nav-item ${location.pathname === '/welcome/news' ? 'active' : ''}`}
+        >
+          <Link to='/welcome/news'>欢迎-新闻</Link>
         </li>
 
         <li

@@ -1,3 +1,11 @@
+/*
+ * @Author: yangzhenhong
+ * @Date: 2025-07-29 11:49:57
+ * @LastEditors: yangzhenhong
+ * @LastEditTime: 2025-07-30 15:54:19
+ * @FilePath: \react-app\src\App.tsx
+ * @Description:
+ */
 /**
  * 应用程序根组件
  *
@@ -10,7 +18,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from '@/store';
-import AppRouter from '@/router';
+import AppRouter from '@/router/router';
 
 function App() {
   return (
