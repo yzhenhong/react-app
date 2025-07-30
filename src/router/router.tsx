@@ -116,7 +116,7 @@ export const routes: RouteConfig[] = [
 ];
 
 /**
- * 渲染单个路由
+ * 递归渲染路由（支持任意深度嵌套）
  * @param route 路由配置
  * @returns React 路由组件
  */
@@ -140,7 +140,7 @@ const renderRoute = (route: RouteConfig): React.ReactNode => {
         path={route.path}
         element={route.element}
       >
-        {route.children.map(child => renderChildRoute(child))}
+        {route.children.map(child => renderRoute(child))}
       </Route>
     );
   }
@@ -151,73 +151,6 @@ const renderRoute = (route: RouteConfig): React.ReactNode => {
       key={route.name || route.path}
       path={route.path}
       element={route.element}
-    />
-  );
-};
-
-/**
- * 渲染子路由
- * @param child 子路由配置
- * @returns React 路由组件
- */
-const renderChildRoute = (child: RouteConfig): React.ReactNode => {
-  // 处理子路由的重定向
-  if (child.redirect) {
-    return (
-      <Route
-        key={child.name || child.path}
-        path={child.path}
-        element={<Navigate to={child.redirect} replace />}
-      />
-    );
-  }
-
-  // 处理有子路由的子路由
-  if (child.children && child.children.length > 0) {
-    return (
-      <Route
-        key={child.name || child.path}
-        path={child.path}
-        element={child.element}
-      >
-        {child.children.map(grandChild => renderGrandChildRoute(grandChild))}
-      </Route>
-    );
-  }
-
-  // 处理普通子路由
-  return (
-    <Route
-      key={child.name || child.path}
-      path={child.path}
-      element={child.element}
-    />
-  );
-};
-
-/**
- * 渲染孙路由
- * @param grandChild 孙路由配置
- * @returns React 路由组件
- */
-const renderGrandChildRoute = (grandChild: RouteConfig): React.ReactNode => {
-  // 处理孙路由的重定向
-  if (grandChild.redirect) {
-    return (
-      <Route
-        key={grandChild.name || grandChild.path}
-        path={grandChild.path}
-        element={<Navigate to={grandChild.redirect} replace />}
-      />
-    );
-  }
-
-  // 处理普通孙路由
-  return (
-    <Route
-      key={grandChild.name || grandChild.path}
-      path={grandChild.path}
-      element={grandChild.element}
     />
   );
 };
