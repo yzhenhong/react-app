@@ -19,6 +19,7 @@ import Welcome from '@/pages/welcome';
 import News from '@/pages/news';
 import RouterDemo from '@/components/RouterDemo';
 import LayoutDemo from '@/components/LayoutDemo';
+import Login from '@/pages/login';
 
 /**
  * 路由配置接口
@@ -107,6 +108,15 @@ export const routes: RouteConfig[] = [
         },
       },
     ],
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    element: React.createElement(Login),
+    meta: {
+      title: '登录页面',
+      layout: 'default',
+    },
   },
   {
     path: '*',
