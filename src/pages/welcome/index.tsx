@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-29 16:14:37
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-30 15:17:54
+ * @LastEditTime: 2025-07-31 10:42:00
  * @FilePath: \react-app\src\pages\welcome\index.tsx
  * @Description: 欢迎页面 - 支持多语言
  */
@@ -26,9 +26,11 @@ const Welcome: React.FC<WelcomeProps> = ({ children }) => {
       <p>{t('pages.welcome.description')}</p>
       <Counter />
       {/* 使用 Outlet 渲染嵌套路由的子组件 */}
-      <Outlet />
+      <div className='welcome-page-outlet'>
+        <Outlet />
+      </div>
       {/* 如果没有嵌套路由，则渲染 children */}
-      {children}
+      <div className='welcome-page-children'>{children}</div>
     </div>
   );
 };

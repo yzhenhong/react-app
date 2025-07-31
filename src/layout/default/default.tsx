@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-29 17:10:50
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-31 08:55:35
+ * @LastEditTime: 2025-07-31 10:29:16
  * @FilePath: \react-app\src\layout\default\default.tsx
  * @Description:
  */
@@ -22,9 +22,11 @@ const LayoutDefault: React.FC<LayoutDefaultProps> = ({ children }) => {
       <Nav />
       <main className='layout-content'>
         {/* 使用 Outlet 渲染嵌套路由的子组件 */}
-        <Outlet />
+        <div className='layout-content-outlet'>
+          <Outlet />
+        </div>
         {/* 如果没有嵌套路由，则渲染 children */}
-        {children}
+        <div className='layout-content-children'>{children}</div>
       </main>
       <Footer />
     </div>

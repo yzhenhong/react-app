@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-29 16:47:56
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-30 15:57:27
+ * @LastEditTime: 2025-07-31 10:44:47
  * @FilePath: \react-app\src\components\Nav\index.tsx
  * @Description: 导航组件 - 支持多语言
  */
@@ -42,7 +42,7 @@ const Navigation: React.FC = () => {
         <li
           className={`nav-item ${location.pathname === '/welcome/news' ? 'active' : ''}`}
         >
-          <Link to='/welcome/news'>{t('nav.news')}</Link>
+          <Link to='/welcome/news'>{t('nav.welcomeNews')}</Link>
         </li>
 
         <li

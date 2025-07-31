@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-30 15:45:00
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-30 16:04:09
+ * @LastEditTime: 2025-07-31 10:43:47
  * @FilePath: \react-app\src\router\router.tsx
  * @Description: 简化的路由配置
  */
@@ -21,6 +21,7 @@ import RouterDemo from '@/components/RouterDemo';
 import LayoutDemo from '@/components/LayoutDemo';
 import Login from '@/pages/login';
 import I18nDemo from '@/pages/i18n-demo';
+import Error from '@/pages/error';
 
 /**
  * 路由配置接口
@@ -66,7 +67,7 @@ export const routes: RouteConfig[] = [
         children: [
           {
             path: '/welcome/news',
-            name: 'News',
+            name: 'WelcomeNews',
             element: React.createElement(News),
           },
         ],
@@ -98,6 +99,15 @@ export const routes: RouteConfig[] = [
           layout: 'default',
         },
       },
+      {
+        path: '/news',
+        name: 'News',
+        element: React.createElement(News),
+        meta: {
+          title: '多语言演示',
+          layout: 'default',
+        },
+      },
     ],
   },
   {
@@ -109,9 +119,9 @@ export const routes: RouteConfig[] = [
     },
     children: [
       {
-        path: '/news',
-        name: 'News',
-        element: React.createElement(News),
+        path: '/error',
+        name: 'Error',
+        element: React.createElement(Error),
         meta: {
           title: '新闻页面',
           layout: 'blank',
