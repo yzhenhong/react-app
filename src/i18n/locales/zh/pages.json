@@ -1,0 +1,22 @@
+{
+  "welcome": {
+    "title": "欢迎来到我们的应用",
+    "subtitle": "这是一个现代化的 React 应用",
+    "description": "使用最新的技术栈构建，包括 React 19、TypeScript、Ant Design 等"
+  },
+  "login": {
+    "title": "登录页面",
+    "username": "用户名",
+    "password": "密码",
+    "rememberMe": "记住我",
+    "forgotPassword": "忘记密码？",
+    "noAccount": "还没有账号？",
+    "signUp": "立即注册"
+  },
+  "news": {
+    "title": "新闻页面",
+    "latest": "最新新闻",
+    "popular": "热门新闻",
+    "readMore": "阅读更多"
+  }
+}

@@ -1,3 +1,11 @@
+/*
+ * @Author: yangzhenhong
+ * @Date: 2025-07-29 11:49:57
+ * @LastEditors: yangzhenhong
+ * @LastEditTime: 2025-07-31 10:00:41
+ * @FilePath: \react-app\src\index.tsx
+ * @Description:
+ */
 /**
  * 应用程序入口文件
  *

@@ -1,0 +1,22 @@
+{
+  "welcome": {
+    "title": "Welcome to Our Application",
+    "subtitle": "This is a modern React application",
+    "description": "Built with the latest technology stack including React 19, TypeScript, Ant Design, etc."
+  },
+  "login": {
+    "title": "Login Page",
+    "username": "Username",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up now"
+  },
+  "news": {
+    "title": "News Page",
+    "latest": "Latest News",
+    "popular": "Popular News",
+    "readMore": "Read More"
+  }
+}

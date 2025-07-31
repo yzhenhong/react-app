@@ -4,14 +4,44 @@
  * @LastEditors: yangzhenhong
  * @LastEditTime: 2025-07-31 09:48:32
  * @FilePath: \react-app\src\i18n\index.ts
- * @Description:
+ * @Description: 模块化多语言配置
  */
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-// 导入语言包
-import en from './locales/en.json';
-import zh from './locales/zh.json';
+// 导入模块化语言包
+import enCommon from './locales/en/common.json';
+import enNav from './locales/en/nav.json';
+import enPages from './locales/en/pages.json';
+import enLayout from './locales/en/layout.json';
+import enDemo from './locales/en/demo.json';
+import enLanguage from './locales/en/language.json';
+
+import zhCommon from './locales/zh/common.json';
+import zhNav from './locales/zh/nav.json';
+import zhPages from './locales/zh/pages.json';
+import zhLayout from './locales/zh/layout.json';
+import zhDemo from './locales/zh/demo.json';
+import zhLanguage from './locales/zh/language.json';
+
+// 合并语言包
+const en = {
+  common: enCommon,
+  nav: enNav,
+  pages: enPages,
+  layout: enLayout,
+  demo: enDemo,
+  language: enLanguage,
+};
+
+const zh = {
+  common: zhCommon,
+  nav: zhNav,
+  pages: zhPages,
+  layout: zhLayout,
+  demo: zhDemo,
+  language: zhLanguage,
+};
 
 // 语言包配置
 const resources = {

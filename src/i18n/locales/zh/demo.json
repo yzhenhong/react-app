@@ -1,0 +1,15 @@
+{
+  "router": {
+    "title": "路由演示",
+    "description": "React Router 使用示例",
+    "currentPath": "当前路径",
+    "navigateExample": "编程式导航示例",
+    "linkExample": "Link 组件示例"
+  },
+  "layout": {
+    "title": "布局演示",
+    "description": "不同布局的使用示例",
+    "defaultLayout": "默认布局",
+    "blankLayout": "空白布局"
+  }
+}

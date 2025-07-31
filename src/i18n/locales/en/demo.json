@@ -1,0 +1,15 @@
+{
+  "router": {
+    "title": "Router Demo",
+    "description": "React Router usage examples",
+    "currentPath": "Current Path",
+    "navigateExample": "Programmatic Navigation Example",
+    "linkExample": "Link Component Example"
+  },
+  "layout": {
+    "title": "Layout Demo",
+    "description": "Different layout usage examples",
+    "defaultLayout": "Default Layout",
+    "blankLayout": "Blank Layout"
+  }
+}

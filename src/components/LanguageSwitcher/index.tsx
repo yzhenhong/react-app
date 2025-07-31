@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Dropdown, Space } from 'antd';
 import { GlobalOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
+import { languageManager } from '@/i18n/languageManager';
 import './index.less';
 
 const LanguageSwitcher: React.FC = () => {
@@ -15,8 +16,12 @@ const LanguageSwitcher: React.FC = () => {
   ];
 
   // 切换语言
-  const handleLanguageChange = (languageKey: string) => {
-    i18n.changeLanguage(languageKey);
+  const handleLanguageChange = async (languageKey: string) => {
+    try {
+      await languageManager.changeLanguage(languageKey as 'zh' | 'en');
+    } catch (error) {
+      console.error('Failed to change language:', error);
+    }
   };
 
   // 下拉菜单项
