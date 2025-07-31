@@ -5,12 +5,14 @@
  * - 渲染 React 应用根组件
  * - 导入全局样式
  * - 性能监控配置
+ * - 多语言支持初始化
  */
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from '@/reportWebVitals';
 import '@/assets/styles/index.less';
+import '@/i18n'; // 导入 i18n 配置
 import App from '@/App';
 
 const root = ReactDOM.createRoot(

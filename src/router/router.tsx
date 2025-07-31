@@ -20,6 +20,7 @@ import News from '@/pages/news';
 import RouterDemo from '@/components/RouterDemo';
 import LayoutDemo from '@/components/LayoutDemo';
 import Login from '@/pages/login';
+import I18nDemo from '@/pages/i18n-demo';
 
 /**
  * 路由配置接口
@@ -85,6 +86,15 @@ export const routes: RouteConfig[] = [
         element: React.createElement(LayoutDemo),
         meta: {
           title: '布局演示',
+          layout: 'default',
+        },
+      },
+      {
+        path: '/i18n-demo',
+        name: 'I18nDemo',
+        element: React.createElement(I18nDemo),
+        meta: {
+          title: '多语言演示',
           layout: 'default',
         },
       },

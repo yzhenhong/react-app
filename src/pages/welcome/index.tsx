@@ -4,10 +4,11 @@
  * @LastEditors: yangzhenhong
  * @LastEditTime: 2025-07-30 15:17:54
  * @FilePath: \react-app\src\pages\welcome\index.tsx
- * @Description:
+ * @Description: 欢迎页面 - 支持多语言
  */
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Counter from '@/components/Counter';
 import './index.less';
 
@@ -16,10 +17,13 @@ interface WelcomeProps {
 }
 
 const Welcome: React.FC<WelcomeProps> = ({ children }) => {
+  const { t } = useTranslation();
+
   return (
     <div className='welcome-page'>
-      <h1>欢迎页面</h1>
-      <p>这是欢迎页面的内容</p>
+      <h1>{t('pages.welcome.title')}</h1>
+      <p>{t('pages.welcome.subtitle')}</p>
+      <p>{t('pages.welcome.description')}</p>
       <Counter />
       {/* 使用 Outlet 渲染嵌套路由的子组件 */}
       <Outlet />
