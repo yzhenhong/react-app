@@ -5,5 +5,7 @@
   "contact": "Contact",
   "news": "News",
   "profile": "Profile",
-  "settings": "Settings"
+  "settings": "Settings",
+  "apiDemo": "API Demo",
+  "apiDemoWithHooks": "API Demo (Custom Hook)"
 }

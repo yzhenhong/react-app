@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-30 15:45:00
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-31 10:43:47
+ * @LastEditTime: 2025-07-31 14:53:00
  * @FilePath: \react-app\src\router\router.tsx
  * @Description: 简化的路由配置
  */
@@ -22,6 +22,8 @@ import LayoutDemo from '@/components/LayoutDemo';
 import Login from '@/pages/login';
 import I18nDemo from '@/pages/i18n-demo';
 import Error from '@/pages/error';
+import ApiDemo from '@/components/ApiDemo';
+import ApiDemoWithHooks from '@/components/ApiDemoWithHooks';
 
 /**
  * 路由配置接口
@@ -105,6 +107,24 @@ export const routes: RouteConfig[] = [
         element: React.createElement(News),
         meta: {
           title: '多语言演示',
+          layout: 'default',
+        },
+      },
+      {
+        path: '/api-demo',
+        name: 'ApiDemo',
+        element: React.createElement(ApiDemo),
+        meta: {
+          title: 'API 演示',
+          layout: 'default',
+        },
+      },
+      {
+        path: '/api-demo-with-hooks',
+        name: 'ApiDemoWithHooks',
+        element: React.createElement(ApiDemoWithHooks),
+        meta: {
+          title: 'API 演示（自定义 Hook）',
           layout: 'default',
         },
       },

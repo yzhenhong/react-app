@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-29 16:47:56
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-31 10:44:47
+ * @LastEditTime: 2025-07-31 14:54:20
  * @FilePath: \react-app\src\components\Nav\index.tsx
  * @Description: 导航组件 - 支持多语言
  */
@@ -67,6 +67,18 @@ const Navigation: React.FC = () => {
           className={`nav-item ${location.pathname === '/news' ? 'active' : ''}`}
         >
           <Link to='/news'>{t('nav.news')}</Link>
+        </li>
+
+        <li
+          className={`nav-item ${location.pathname === '/api-demo' ? 'active' : ''}`}
+        >
+          <Link to='/api-demo'>{t('nav.apiDemo')}</Link>
+        </li>
+
+        <li
+          className={`nav-item ${location.pathname === '/api-demo-with-hooks' ? 'active' : ''}`}
+        >
+          <Link to='/api-demo-with-hooks'>{t('nav.apiDemoWithHooks')}</Link>
         </li>
       </ul>
 

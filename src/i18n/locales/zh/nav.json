@@ -5,5 +5,7 @@
   "contact": "联系我们",
   "news": "新闻",
   "profile": "个人资料",
-  "settings": "设置"
+  "settings": "设置",
+  "apiDemo": "API 演示",
+  "apiDemoWithHooks": "API 演示（自定义 Hook）"
 }

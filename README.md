@@ -253,6 +253,152 @@ A: 在 `craco.config.ts` 文件的 `webpack.alias` 部分添加新的别名。
 
 **Happy Coding! 🎉**
 
+## 🌐 Axios HTTP 客户端
+
+### 概述
+
+项目使用 Axios 作为 HTTP 客户端，用于与后端 API 进行通信。Axios 提供了简洁的 API 接口，支持请求和响应拦截器、自动转换 JSON 数据等功能。
+
+### 目录结构
+
+```
+src/api/
+├── config.ts          # Axios 基础配置
+├── services/          # API 服务
+│   ├── index.ts       # 服务导出
+│   ├── userService.ts # 用户相关 API
+│   └── commonService.ts # 通用 API 方法
+├── hooks/             # 自定义 Hook
+│   └── useApi.ts      # API Hook
+└── README.md          # 详细使用指南
+```
+
+### 快速开始
+
+#### 1. **基础配置 (src/api/config.ts)**
+- 设置基础 URL 和超时时间
+- 配置请求和响应拦截器
+- 统一错误处理
+- 支持请求和响应日志记录
+
+#### 2. **API 服务 (src/api/services/)**
+- 按功能模块组织 API 接口
+- 提供 TypeScript 类型定义
+- 支持请求参数和响应数据的类型检查
+
+#### 3. **自定义 Hook (src/api/hooks/)**
+- `useApi`: 通用 API 调用 Hook
+- `useFetch`: 数据获取 Hook
+- `useSubmit`: 表单提交 Hook
+
+### 使用示例
+
+#### 基础 API 调用
+```typescript
+import { api } from '@/api/config';
+
+const getUserInfo = async (userId: string) => {
+  try {
+    const response = await api.get(`/users/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('获取用户信息失败:', error);
+    throw error;
+  }
+};
+```
+
+#### 使用 API 服务
+```typescript
+import { login, getCurrentUser } from '@/api/services/userService';
+
+const handleLogin = async (email: string, password: string) => {
+  try {
+    const response = await login({ email, password });
+    if (response.success) {
+      console.log('登录成功:', response.data);
+    }
+  } catch (error) {
+    console.error('登录失败:', error);
+  }
+};
+```
+
+#### 使用自定义 Hook
+```typescript
+import { useSubmit, useFetch } from '@/api/hooks/useApi';
+import { login, getCurrentUser } from '@/api/services/userService';
+
+const MyComponent = () => {
+  const loginSubmit = useSubmit(login, {
+    successMessage: '登录成功！',
+    errorMessage: '登录失败',
+  });
+
+  const userInfo = useFetch(getCurrentUser, {
+    immediate: true,
+  });
+
+  return (
+    <div>
+      {userInfo.loading && <div>加载中...</div>}
+      {userInfo.data && <div>用户: {userInfo.data.name}</div>}
+      {userInfo.error && <div>错误: {userInfo.error}</div>}
+    </div>
+  );
+};
+```
+
+### 高级功能
+
+#### 1. **请求拦截器**
+- 自动添加认证 token
+- 添加请求头信息
+- 请求参数预处理
+
+#### 2. **响应拦截器**
+- 统一错误处理
+- 数据格式转换
+- 登录状态检查
+
+#### 3. **错误处理**
+- 网络错误处理
+- 服务器错误处理
+- 业务逻辑错误处理
+
+#### 4. **文件上传**
+```typescript
+import { uploadFile } from '@/api/services/commonService';
+
+const handleFileUpload = async (file: File) => {
+  try {
+    const response = await uploadFile('/upload', file, (progress) => {
+      console.log(`上传进度: ${progress}%`);
+    });
+    console.log('上传成功:', response.data);
+  } catch (error) {
+    console.error('上传失败:', error);
+  }
+};
+```
+
+### 最佳实践
+
+1. **统一配置**：在 `src/api/config.ts` 中集中配置 Axios
+2. **类型安全**：为所有 API 请求和响应定义 TypeScript 接口
+3. **错误处理**：使用 try-catch 包装所有 API 调用
+4. **加载状态**：在组件中管理 API 调用的加载状态
+5. **缓存策略**：合理使用缓存减少重复请求
+6. **自定义 Hook**：使用提供的 Hook 简化 API 调用
+
+### 示例组件
+
+项目提供了两个示例组件：
+- **ApiDemo**: 基础 API 调用示例
+- **ApiDemoWithHooks**: 使用自定义 Hook 的示例
+
+详细使用指南请参考：[src/api/README.md](src/api/README.md)
+
 ## 🛣️ React Router 路由系统
 
 ### 核心组件说明
