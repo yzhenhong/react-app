@@ -53,16 +53,41 @@ const resources = {
   },
 };
 
+// 获取存储的语言设置
+const getStoredLanguage = (): string => {
+  try {
+    const stored = localStorage.getItem('i18n-language');
+    return stored && ['zh', 'en'].includes(stored) ? stored : 'zh';
+  } catch (error) {
+    console.warn('Failed to get stored language:', error);
+    return 'zh';
+  }
+};
+
+// 保存语言设置
+const saveLanguage = (language: string): void => {
+  try {
+    localStorage.setItem('i18n-language', language);
+  } catch (error) {
+    console.warn('Failed to save language:', error);
+  }
+};
+
 // i18n 配置
 i18n.use(initReactI18next).init({
   resources,
-  lng: 'zh', // 默认语言
+  lng: getStoredLanguage(), // 使用存储的语言设置
   fallbackLng: 'en', // 回退语言
   interpolation: {
     escapeValue: false, // React 已经转义了，所以不需要
   },
   // 调试模式
   debug: process.env.NODE_ENV === 'development',
+});
+
+// 监听语言变化，自动保存到 localStorage
+i18n.on('languageChanged', language => {
+  saveLanguage(language);
 });
 
 export default i18n;

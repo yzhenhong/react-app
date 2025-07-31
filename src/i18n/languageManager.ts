@@ -8,7 +8,10 @@
  */
 
 import i18n from 'i18next';
-import { loadLanguageModules, SupportedLanguage } from './languageLoader';
+import { loadLanguageModules } from './languageLoader';
+
+// 支持的语言类型
+export type SupportedLanguage = 'zh' | 'en';
 
 /**
  * 语言包管理器
@@ -29,6 +32,32 @@ export class LanguageManager {
       LanguageManager.instance = new LanguageManager();
     }
     return LanguageManager.instance;
+  }
+
+  /**
+   * 获取存储的语言设置
+   */
+  private getStoredLanguage(): SupportedLanguage {
+    try {
+      const stored = localStorage.getItem('i18n-language');
+      return (
+        stored && ['zh', 'en'].includes(stored) ? stored : 'zh'
+      ) as SupportedLanguage;
+    } catch (error) {
+      console.warn('Failed to get stored language:', error);
+      return 'zh';
+    }
+  }
+
+  /**
+   * 保存语言设置
+   */
+  private saveLanguage(language: SupportedLanguage): void {
+    try {
+      localStorage.setItem('i18n-language', language);
+    } catch (error) {
+      console.warn('Failed to save language:', error);
+    }
   }
 
   /**
@@ -87,6 +116,9 @@ export class LanguageManager {
       // 切换语言
       await i18n.changeLanguage(language);
 
+      // 保存到本地存储
+      this.saveLanguage(language);
+
       console.log(`Language changed to: ${language}`);
     } catch (error) {
       console.error(`Failed to change language: ${language}`, error);
@@ -117,10 +149,30 @@ export class LanguageManager {
   }
 
   /**
+   * 获取存储的语言设置
+   */
+  public getStoredLanguageSetting(): SupportedLanguage {
+    return this.getStoredLanguage();
+  }
+
+  /**
    * 获取支持的语言列表
    */
   public getSupportedLanguages(): SupportedLanguage[] {
     return ['zh', 'en'];
+  }
+
+  /**
+   * 重置语言设置（恢复到默认语言）
+   */
+  public resetLanguage(): void {
+    try {
+      localStorage.removeItem('i18n-language');
+      i18n.changeLanguage('zh');
+      console.log('Language reset to default: zh');
+    } catch (error) {
+      console.error('Failed to reset language:', error);
+    }
   }
 }
 

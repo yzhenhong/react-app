@@ -1,13 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown, Space } from 'antd';
+import { Button, Dropdown, Space, Spin } from 'antd';
 import { GlobalOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { languageManager } from '@/i18n/languageManager';
+import { useLanguage } from '@/i18n/useLanguage';
 import './index.less';
 
 const LanguageSwitcher: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const { currentLanguage, isLoading, changeLanguage } = useLanguage();
 
   // 语言选项
   const languages = [
@@ -18,7 +19,7 @@ const LanguageSwitcher: React.FC = () => {
   // 切换语言
   const handleLanguageChange = async (languageKey: string) => {
     try {
-      await languageManager.changeLanguage(languageKey as 'zh' | 'en');
+      await changeLanguage(languageKey as 'zh' | 'en');
     } catch (error) {
       console.error('Failed to change language:', error);
     }
@@ -31,22 +32,27 @@ const LanguageSwitcher: React.FC = () => {
       <Space>
         <span>{lang.flag}</span>
         <span>{lang.label}</span>
+        {currentLanguage === lang.key && <span>✓</span>}
       </Space>
     ),
     onClick: () => handleLanguageChange(lang.key),
   }));
 
   // 当前语言
-  const currentLanguage =
-    languages.find(lang => lang.key === i18n.language) || languages[0];
+  const currentLanguageInfo =
+    languages.find(lang => lang.key === currentLanguage) || languages[0];
 
   return (
     <div className='language-switcher'>
       <Dropdown menu={{ items }} placement='bottomRight'>
-        <Button type='text' icon={<GlobalOutlined />}>
+        <Button type='text' icon={<GlobalOutlined />} disabled={isLoading}>
           <Space>
-            <span>{currentLanguage.flag}</span>
-            <span>{currentLanguage.label}</span>
+            {isLoading ? (
+              <Spin size='small' />
+            ) : (
+              <span>{currentLanguageInfo.flag}</span>
+            )}
+            <span>{currentLanguageInfo.label}</span>
           </Space>
         </Button>
       </Dropdown>

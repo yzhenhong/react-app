@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-31 09:50:00
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-31 09:50:00
+ * @LastEditTime: 2025-07-31 10:55:40
  * @FilePath: \react-app\src\i18n\languageLoader.ts
  * @Description: 动态语言包加载器
  */
@@ -17,7 +17,7 @@ export interface LanguageModules {
   language: any;
 }
 
-// 支持的语言
+// 支持的语言（从 languageManager 导入）
 export type SupportedLanguage = 'zh' | 'en';
 
 // 语言包模块列表
