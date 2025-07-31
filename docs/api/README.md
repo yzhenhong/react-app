@@ -14,10 +14,9 @@ src/api/
 ├── user/              # 用户管理模块
 │   ├── index.ts       # 用户管理 API
 │   └── type.ts        # 用户管理类型定义
-├── article/           # 文章管理模块
-│   ├── index.ts       # 文章管理 API
-│   └── type.ts        # 文章管理类型定义
-└── README.md          # 详细使用指南
+└── article/           # 文章管理模块
+    ├── index.ts       # 文章管理 API
+    └── type.ts        # 文章管理类型定义
 ```
 
 ## 🚀 快速开始
@@ -127,163 +126,13 @@ const MyComponent = () => {
 
 ## 📋 模块化 API
 
-### 登录模块 (`/api/login`)
+项目按功能模块组织 API，每个模块包含：
 
-```typescript
-import { login, register, logout, getCurrentUser } from '@/api/login';
-import type { LoginRequest, User } from '@/api/login/type';
+- **登录模块** (`/api/login`): 用户认证、登录、注册等
+- **用户管理模块** (`/api/user`): 用户 CRUD 操作、权限管理等
+- **文章管理模块** (`/api/article`): 文章 CRUD 操作、分类管理等
 
-// 用户登录
-login(data: LoginRequest): Promise<ApiResponse<LoginResponse>>
-
-// 用户注册
-register(data: RegisterRequest): Promise<ApiResponse<User>>
-
-// 用户登出
-logout(): Promise<ApiResponse<void>>
-
-// 获取当前用户信息
-getCurrentUser(): Promise<ApiResponse<User>>
-
-// 更新用户信息
-updateUser(data: UpdateUserRequest): Promise<ApiResponse<User>>
-
-// 上传用户头像
-uploadAvatar(file: File): Promise<ApiResponse<{ avatarUrl: string }>>
-
-// 重置密码
-resetPassword(data: ResetPasswordRequest): Promise<ApiResponse<void>>
-
-// 修改密码
-changePassword(data: ChangePasswordRequest): Promise<ApiResponse<void>>
-
-// 验证邮箱
-verifyEmail(data: VerifyEmailRequest): Promise<ApiResponse<void>>
-
-// 发送验证码
-sendVerificationCode(data: SendVerificationCodeRequest): Promise<ApiResponse<void>>
-
-// 刷新访问令牌
-refreshToken(refreshToken: string): Promise<ApiResponse<{ token: string; refreshToken: string }>>
-
-// 删除用户账户
-deleteAccount(): Promise<ApiResponse<void>>
-```
-
-### 用户管理模块 (`/api/user`)
-
-```typescript
-import { getUsers, createUser, updateUser, deleteUser } from '@/api/user';
-import type { User, CreateUserRequest, UpdateUserRequest } from '@/api/user/type';
-
-// 获取用户列表
-getUsers(params?: UserListParams): Promise<ApiResponse<UserListResponse>>
-
-// 获取单个用户信息
-getUser(id: string): Promise<ApiResponse<User>>
-
-// 创建用户
-createUser(data: CreateUserRequest): Promise<ApiResponse<User>>
-
-// 更新用户信息
-updateUser(id: string, data: UpdateUserRequest): Promise<ApiResponse<User>>
-
-// 删除用户
-deleteUser(id: string): Promise<ApiResponse<void>>
-
-// 批量删除用户
-batchDeleteUsers(ids: string[]): Promise<ApiResponse<void>>
-
-// 获取用户统计信息
-getUserStats(): Promise<ApiResponse<UserStats>>
-
-// 激活用户
-activateUser(id: string): Promise<ApiResponse<User>>
-
-// 停用用户
-deactivateUser(id: string): Promise<ApiResponse<User>>
-
-// 封禁用户
-banUser(id: string, reason?: string): Promise<ApiResponse<User>>
-
-// 解封用户
-unbanUser(id: string): Promise<ApiResponse<User>>
-
-// 重置用户密码
-resetUserPassword(id: string): Promise<ApiResponse<{ newPassword: string }>>
-
-// 导出用户数据
-exportUsers(params?: UserListParams): Promise<ApiResponse<{ downloadUrl: string }>>
-```
-
-### 文章管理模块 (`/api/article`)
-
-```typescript
-import { getArticles, createArticle, updateArticle, deleteArticle } from '@/api/article';
-import type { Article, CreateArticleRequest, UpdateArticleRequest } from '@/api/article/type';
-
-// 获取文章列表
-getArticles(params?: ArticleListParams): Promise<ApiResponse<ArticleListResponse>>
-
-// 获取单个文章信息
-getArticle(id: string): Promise<ApiResponse<Article>>
-
-// 创建文章
-createArticle(data: CreateArticleRequest): Promise<ApiResponse<Article>>
-
-// 更新文章信息
-updateArticle(id: string, data: UpdateArticleRequest): Promise<ApiResponse<Article>>
-
-// 删除文章
-deleteArticle(id: string): Promise<ApiResponse<void>>
-
-// 批量删除文章
-batchDeleteArticles(ids: string[]): Promise<ApiResponse<void>>
-
-// 发布文章
-publishArticle(id: string): Promise<ApiResponse<Article>>
-
-// 取消发布文章
-unpublishArticle(id: string): Promise<ApiResponse<Article>>
-
-// 归档文章
-archiveArticle(id: string): Promise<ApiResponse<Article>>
-
-// 获取文章统计信息
-getArticleStats(): Promise<ApiResponse<ArticleStats>>
-
-// 获取文章分类列表
-getCategories(): Promise<ApiResponse<Category[]>>
-
-// 创建文章分类
-createCategory(data: { name: string; description?: string; parentId?: string }): Promise<ApiResponse<Category>>
-
-// 更新文章分类
-updateCategory(id: string, data: { name?: string; description?: string; parentId?: string }): Promise<ApiResponse<Category>>
-
-// 删除文章分类
-deleteCategory(id: string): Promise<ApiResponse<void>>
-
-// 获取文章评论列表
-getArticleComments(articleId: string): Promise<ApiResponse<Comment[]>>
-
-// 创建文章评论
-createArticleComment(articleId: string, data: CreateCommentRequest): Promise<ApiResponse<Comment>>
-
-// 删除文章评论
-deleteArticleComment(articleId: string, commentId: string): Promise<ApiResponse<void>>
-
-// 点赞文章
-likeArticle(id: string): Promise<ApiResponse<void>>
-
-// 取消点赞文章
-unlikeArticle(id: string): Promise<ApiResponse<void>>
-
-// 增加文章浏览量
-incrementArticleView(id: string): Promise<ApiResponse<void>>
-```
-
-
+每个模块都提供完整的 TypeScript 类型支持和错误处理。
 
 ## 🔧 配置说明
 
@@ -292,7 +141,7 @@ incrementArticleView(id: string): Promise<ApiResponse<void>>
 在 `src/api/config.ts` 中配置了：
 
 - **基础 URL**: 根据环境变量设置
-- **超时时间**: 10 秒
+- **超时时间**: xx 秒
 - **请求头**: 自动设置 Content-Type
 - **凭证**: 支持跨域请求携带凭证
 
@@ -386,6 +235,5 @@ REACT_APP_API_BASE_URL=http://localhost:3001/api
 ## 📚 相关文档
 
 - [Axios 官方文档](https://axios-http.com/)
-
 - [TypeScript 文档](https://www.typescriptlang.org/docs/)
 - [RESTful API 设计指南](https://restfulapi.net/)
