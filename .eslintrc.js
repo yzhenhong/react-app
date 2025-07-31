@@ -65,7 +65,7 @@ module.exports = {
     'react/jsx-uses-vars': 'error', // 检查 JSX 中使用的变量
 
     // 通用代码质量规则
-    'no-console': 'warn', // 警告使用 console
+    'no-console': 'off', // 允许使用 console
     'no-debugger': 'error', // 禁止使用 debugger
     'no-alert': 'warn', // 警告使用 alert
     'prefer-const': 'error', // 优先使用 const

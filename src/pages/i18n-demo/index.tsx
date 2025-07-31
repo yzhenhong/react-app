@@ -2,21 +2,20 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, Typography, Space, Button, Divider, Alert, Tag } from 'antd';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import { useLanguage } from '@/i18n/useLanguage';
+import {
+  useLanguageChange,
+  getCurrentLanguage,
+  getSupportedLanguages,
+  resetLanguage,
+} from '@/i18n';
 import './index.less';
 
 const { Title, Paragraph, Text } = Typography;
 
 const I18nDemo: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const {
-    currentLanguage,
-    isLoading,
-    changeLanguage,
-    resetLanguage,
-    getSupportedLanguages,
-    isLanguageLoaded,
-  } = useLanguage();
+  const { isLoading, changeLanguage } = useLanguageChange();
+  const currentLanguage = getCurrentLanguage();
 
   return (
     <div className='i18n-demo-page'>
@@ -60,11 +59,8 @@ const I18nDemo: React.FC = () => {
               <Paragraph>
                 <Text strong>支持的语言：</Text>
                 {getSupportedLanguages().map(lang => (
-                  <Tag
-                    key={lang}
-                    color={isLanguageLoaded(lang) ? 'green' : 'default'}
-                  >
-                    {lang} {isLanguageLoaded(lang) ? '✓' : '⏳'}
+                  <Tag key={lang} color='green'>
+                    {lang} ✓
                   </Tag>
                 ))}
               </Paragraph>

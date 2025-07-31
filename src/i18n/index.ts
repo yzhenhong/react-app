@@ -2,12 +2,16 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-31 09:45:00
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-31 09:48:32
+ * @LastEditTime: 2025-07-31 13:16:11
  * @FilePath: \react-app\src\i18n\index.ts
- * @Description: 模块化多语言配置
+ * @Description: 简化的多语言配置 - 整合所有功能
  */
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import React from 'react';
+
+// 支持的语言类型
+export type SupportedLanguage = 'zh' | 'en';
 
 // 导入模块化语言包
 import enCommon from './locales/en/common.json';
@@ -45,49 +49,120 @@ const zh = {
 
 // 语言包配置
 const resources = {
-  en: {
-    translation: en,
-  },
-  zh: {
-    translation: zh,
-  },
+  en: { translation: en },
+  zh: { translation: zh },
 };
 
-// 获取存储的语言设置
-const getStoredLanguage = (): string => {
+// 语言存储键名
+const LANGUAGE_STORAGE_KEY = 'i18n-language';
+
+// 默认语言
+const DEFAULT_LANGUAGE: SupportedLanguage = 'zh';
+
+// 支持的语言列表
+const SUPPORTED_LANGUAGES: SupportedLanguage[] = ['zh', 'en'];
+
+/**
+ * 获取存储的语言设置
+ */
+export const getStoredLanguage = (): SupportedLanguage => {
   try {
-    const stored = localStorage.getItem('i18n-language');
-    return stored && ['zh', 'en'].includes(stored) ? stored : 'zh';
+    const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    return stored && SUPPORTED_LANGUAGES.includes(stored as SupportedLanguage)
+      ? (stored as SupportedLanguage)
+      : DEFAULT_LANGUAGE;
   } catch (error) {
     console.warn('Failed to get stored language:', error);
-    return 'zh';
+    return DEFAULT_LANGUAGE;
   }
 };
 
-// 保存语言设置
-const saveLanguage = (language: string): void => {
+/**
+ * 保存语言设置
+ */
+export const saveLanguage = (language: SupportedLanguage): void => {
   try {
-    localStorage.setItem('i18n-language', language);
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
   } catch (error) {
     console.warn('Failed to save language:', error);
+  }
+};
+
+/**
+ * 切换语言
+ */
+export const changeLanguage = async (
+  language: SupportedLanguage
+): Promise<void> => {
+  try {
+    await i18n.changeLanguage(language);
+    saveLanguage(language);
+    console.log(`Language changed to: ${language}`);
+  } catch (error) {
+    console.error(`Failed to change language: ${language}`, error);
+    throw error;
+  }
+};
+
+/**
+ * 获取当前语言
+ */
+export const getCurrentLanguage = (): SupportedLanguage => {
+  return i18n.language as SupportedLanguage;
+};
+
+/**
+ * 获取支持的语言列表
+ */
+export const getSupportedLanguages = (): SupportedLanguage[] => {
+  return SUPPORTED_LANGUAGES;
+};
+
+/**
+ * 重置语言设置
+ */
+export const resetLanguage = (): void => {
+  try {
+    localStorage.removeItem(LANGUAGE_STORAGE_KEY);
+    i18n.changeLanguage(DEFAULT_LANGUAGE);
+    console.log(`Language reset to default: ${DEFAULT_LANGUAGE}`);
+  } catch (error) {
+    console.error('Failed to reset language:', error);
   }
 };
 
 // i18n 配置
 i18n.use(initReactI18next).init({
   resources,
-  lng: getStoredLanguage(), // 使用存储的语言设置
-  fallbackLng: 'en', // 回退语言
+  lng: getStoredLanguage(),
+  fallbackLng: 'en',
   interpolation: {
-    escapeValue: false, // React 已经转义了，所以不需要
+    escapeValue: false,
   },
-  // 调试模式
   debug: process.env.NODE_ENV === 'development',
 });
 
-// 监听语言变化，自动保存到 localStorage
-i18n.on('languageChanged', language => {
-  saveLanguage(language);
-});
+/**
+ * 语言切换 Hook - 提供加载状态管理
+ */
+export const useLanguageChange = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const changeLanguageWithLoading = async (language: SupportedLanguage) => {
+    setIsLoading(true);
+    try {
+      await changeLanguage(language);
+    } catch (error) {
+      console.error('Failed to change language:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return {
+    isLoading,
+    changeLanguage: changeLanguageWithLoading,
+  };
+};
 
 export default i18n;

@@ -1,14 +1,23 @@
+/*
+ * @Author: yangzhenhong
+ * @Date: 2025-07-31 09:45:43
+ * @LastEditors: yangzhenhong
+ * @LastEditTime: 2025-07-31 11:09:09
+ * @FilePath: \react-app\src\components\LanguageSwitcher\index.tsx
+ * @Description: 语言切换组件
+ */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown, Space, Spin } from 'antd';
 import { GlobalOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { useLanguage } from '@/i18n/useLanguage';
+import { useLanguageChange, getCurrentLanguage } from '@/i18n';
 import './index.less';
 
 const LanguageSwitcher: React.FC = () => {
   const { t } = useTranslation();
-  const { currentLanguage, isLoading, changeLanguage } = useLanguage();
+  const { isLoading, changeLanguage } = useLanguageChange();
+  const currentLanguage = getCurrentLanguage();
 
   // 语言选项
   const languages = [
