@@ -264,12 +264,17 @@ A: 在 `craco.config.ts` 文件的 `webpack.alias` 部分添加新的别名。
 ```
 src/api/
 ├── config.ts          # Axios 基础配置
-├── services/          # API 服务
-│   ├── index.ts       # 服务导出
-│   ├── userService.ts # 用户相关 API
-│   └── commonService.ts # 通用 API 方法
-├── hooks/             # 自定义 Hook
-│   └── useApi.ts      # API Hook
+├── index.ts           # 通用 API 方法 (get, post, put, del, patch, upload)
+├── login/             # 登录认证模块
+│   ├── index.ts       # 登录相关 API 方法
+│   └── type.ts        # 登录模块类型定义
+├── user/              # 用户管理模块
+│   ├── index.ts       # 用户管理 API 方法
+│   └── type.ts        # 用户模块类型定义
+├── article/           # 文章管理模块
+│   ├── index.ts       # 文章管理 API 方法
+│   └── type.ts        # 文章模块类型定义
+
 └── README.md          # 详细使用指南
 ```
 
@@ -281,73 +286,105 @@ src/api/
 - 统一错误处理
 - 支持请求和响应日志记录
 
-#### 2. **API 服务 (src/api/services/)**
-- 按功能模块组织 API 接口
-- 提供 TypeScript 类型定义
-- 支持请求参数和响应数据的类型检查
+#### 2. **模块化 API 服务**
+- 按功能模块组织 API 接口 (login/, user/, article/)
+- 每个模块包含 API 方法和类型定义
+- 提供完整的 TypeScript 类型支持
+- 遵循 RESTful API 设计规范
 
-#### 3. **自定义 Hook (src/api/hooks/)**
-- `useApi`: 通用 API 调用 Hook
-- `useFetch`: 数据获取 Hook
-- `useSubmit`: 表单提交 Hook
+
 
 ### 使用示例
 
-#### 基础 API 调用
+#### 模块化 API 调用
 ```typescript
-import { api } from '@/api/config';
+// 登录认证
+import { login, getCurrentUser } from '@/api/login';
+import type { LoginRequest, User } from '@/api/login/type';
 
-const getUserInfo = async (userId: string) => {
+// 用户管理
+import { getUsers, createUser, updateUser } from '@/api/user';
+import type { UserListParams, CreateUserRequest } from '@/api/user/type';
+
+// 文章管理
+import { getArticles, createArticle } from '@/api/article';
+import type { ArticleListParams, CreateArticleRequest } from '@/api/article/type';
+
+// 使用示例
+const handleLogin = async (loginData: LoginRequest) => {
   try {
-    const response = await api.get(`/users/${userId}`);
-    return response.data;
-  } catch (error) {
-    console.error('获取用户信息失败:', error);
-    throw error;
-  }
-};
-```
-
-#### 使用 API 服务
-```typescript
-import { login, getCurrentUser } from '@/api/services/userService';
-
-const handleLogin = async (email: string, password: string) => {
-  try {
-    const response = await login({ email, password });
+    const response = await login(loginData);
     if (response.success) {
-      console.log('登录成功:', response.data);
+      // 登录成功，保存 token
+      localStorage.setItem('token', response.data.token);
+      return response.data;
     }
   } catch (error) {
     console.error('登录失败:', error);
   }
 };
+
+const fetchUsers = async (params: UserListParams) => {
+  try {
+    const response = await getUsers(params);
+    if (response.success) {
+      return response.data.users;
+    }
+  } catch (error) {
+    console.error('获取用户列表失败:', error);
+  }
+};
+
+const createNewArticle = async (articleData: CreateArticleRequest) => {
+  try {
+    const response = await createArticle(articleData);
+    if (response.success) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error('创建文章失败:', error);
+  }
+};
 ```
 
-#### 使用自定义 Hook
+#### 在组件中使用
 ```typescript
-import { useSubmit, useFetch } from '@/api/hooks/useApi';
-import { login, getCurrentUser } from '@/api/services/userService';
+import React, { useState } from 'react';
+import { login, getCurrentUser } from '@/api/login';
+import type { LoginRequest, User } from '@/api/login/type';
 
-const MyComponent = () => {
-  const loginSubmit = useSubmit(login, {
-    successMessage: '登录成功！',
-    errorMessage: '登录失败',
-  });
+const LoginComponent = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const userInfo = useFetch(getCurrentUser, {
-    immediate: true,
-  });
+  const handleLogin = async (values: LoginRequest) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await login(values);
+      if (response.success) {
+        localStorage.setItem('token', response.data.token);
+        // 处理登录成功
+      } else {
+        setError(response.message || '登录失败');
+      }
+    } catch (error) {
+      setError('登录失败，请检查网络连接');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div>
-      {userInfo.loading && <div>加载中...</div>}
-      {userInfo.data && <div>用户: {userInfo.data.name}</div>}
-      {userInfo.error && <div>错误: {userInfo.error}</div>}
-    </div>
+    <Form onFinish={handleLogin}>
+      {/* 表单内容 */}
+    </Form>
   );
 };
 ```
+
+
 
 ### 高级功能
 
@@ -368,7 +405,7 @@ const MyComponent = () => {
 
 #### 4. **文件上传**
 ```typescript
-import { uploadFile } from '@/api/services/commonService';
+import { uploadFile } from '@/api';
 
 const handleFileUpload = async (file: File) => {
   try {
@@ -389,13 +426,12 @@ const handleFileUpload = async (file: File) => {
 3. **错误处理**：使用 try-catch 包装所有 API 调用
 4. **加载状态**：在组件中管理 API 调用的加载状态
 5. **缓存策略**：合理使用缓存减少重复请求
-6. **自定义 Hook**：使用提供的 Hook 简化 API 调用
+6. **模块化设计**：按功能模块组织 API，便于维护和扩展
 
 ### 示例组件
 
-项目提供了两个示例组件：
-- **ApiDemo**: 基础 API 调用示例
-- **ApiDemoWithHooks**: 使用自定义 Hook 的示例
+项目提供了一个完整的示例组件：
+- **ApiDemo**: 模块化 API 使用示例，展示了登录、用户信息获取、用户列表和文章列表等功能
 
 详细使用指南请参考：[src/api/README.md](src/api/README.md)
 

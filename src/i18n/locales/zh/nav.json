@@ -6,6 +6,5 @@
   "news": "新闻",
   "profile": "个人资料",
   "settings": "设置",
-  "apiDemo": "API 演示",
-  "apiDemoWithHooks": "API 演示（自定义 Hook）"
+  "apiDemo": "API 演示"
 }

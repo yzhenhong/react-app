@@ -1,18 +1,23 @@
 # API 使用指南
 
-本项目使用 Axios 作为 HTTP 客户端，提供了完整的 API 调用解决方案。
+本项目使用 Axios 作为 HTTP 客户端，提供了完整的 API 调用解决方案，遵循 RESTful API 规范和模块化设计。
 
 ## 📁 目录结构
 
 ```
 src/api/
 ├── config.ts          # Axios 基础配置
-├── services/          # API 服务
-│   ├── index.ts       # 服务导出
-│   ├── userService.ts # 用户相关 API
-│   └── commonService.ts # 通用 API 方法
-└── hooks/             # 自定义 Hook
-    └── useApi.ts      # API Hook
+├── index.ts           # 通用 API 方法封装
+├── login/             # 登录模块
+│   ├── index.ts       # 登录相关 API
+│   └── type.ts        # 登录模块类型定义
+├── user/              # 用户管理模块
+│   ├── index.ts       # 用户管理 API
+│   └── type.ts        # 用户管理类型定义
+├── article/           # 文章管理模块
+│   ├── index.ts       # 文章管理 API
+│   └── type.ts        # 文章管理类型定义
+└── README.md          # 详细使用指南
 ```
 
 ## 🚀 快速开始
@@ -22,16 +27,35 @@ src/api/
 在 `src/api/config.ts` 中配置了 Axios 实例：
 
 ```typescript
-import { api } from '@/api/config';
+import { api } from '@/api';
 
 // 直接使用配置好的 axios 实例
 const response = await api.get('/users');
 ```
 
-### 2. 使用 API 服务
+### 2. 使用通用 API 方法
 
 ```typescript
-import { login, getCurrentUser } from '@/api/services/userService';
+import { get, post, put, del } from '@/api';
+
+// GET 请求
+const users = await get('/users', { page: 1, limit: 10 });
+
+// POST 请求
+const newUser = await post('/users', { name: 'John', email: 'john@example.com' });
+
+// PUT 请求
+const updatedUser = await put('/users/1', { name: 'John Updated' });
+
+// DELETE 请求
+await del('/users/1');
+```
+
+### 3. 使用模块化 API
+
+```typescript
+import { login, getCurrentUser } from '@/api/login';
+import type { LoginRequest } from '@/api/login/type';
 
 // 用户登录
 const handleLogin = async (email: string, password: string) => {
@@ -46,43 +70,69 @@ const handleLogin = async (email: string, password: string) => {
 };
 ```
 
-### 3. 使用自定义 Hook
+### 4. 在组件中使用
 
 ```typescript
-import { useSubmit, useFetch } from '@/api/hooks/useApi';
-import { login, getCurrentUser } from '@/api/services/userService';
+import React, { useState } from 'react';
+import { login, getCurrentUser } from '@/api/login';
+import type { LoginRequest, User } from '@/api/login/type';
 
 const MyComponent = () => {
-  // 处理表单提交
-  const loginSubmit = useSubmit(login, {
-    successMessage: '登录成功！',
-    errorMessage: '登录失败',
-  });
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  // 获取数据
-  const userInfo = useFetch(getCurrentUser, {
-    immediate: true, // 组件挂载时自动执行
-  });
+  // 处理登录
+  const handleLogin = async (formData: LoginRequest) => {
+    setLoading(true);
+    setError(null);
 
-  const handleLogin = (formData) => {
-    loginSubmit.execute(formData);
+    try {
+      const response = await login(formData);
+      if (response.success) {
+        localStorage.setItem('token', response.data.token);
+        // 获取用户信息
+        await fetchUserInfo();
+      } else {
+        setError(response.message || '登录失败');
+      }
+    } catch (error) {
+      setError('登录失败，请检查网络连接');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 获取用户信息
+  const fetchUserInfo = async () => {
+    try {
+      const response = await getCurrentUser();
+      if (response.success) {
+        setUser(response.data);
+      }
+    } catch (error) {
+      setError('获取用户信息失败');
+    }
   };
 
   return (
     <div>
-      {userInfo.loading && <div>加载中...</div>}
-      {userInfo.data && <div>用户: {userInfo.data.name}</div>}
-      {userInfo.error && <div>错误: {userInfo.error}</div>}
+      {loading && <div>加载中...</div>}
+      {user && <div>用户: {user.name}</div>}
+      {error && <div>错误: {error}</div>}
     </div>
   );
 };
 ```
 
-## 📋 API 服务
+## 📋 模块化 API
 
-### 用户服务 (userService.ts)
+### 登录模块 (`/api/login`)
 
 ```typescript
+import { login, register, logout, getCurrentUser } from '@/api/login';
+import type { LoginRequest, User } from '@/api/login/type';
+
 // 用户登录
 login(data: LoginRequest): Promise<ApiResponse<LoginResponse>>
 
@@ -101,86 +151,139 @@ updateUser(data: UpdateUserRequest): Promise<ApiResponse<User>>
 // 上传用户头像
 uploadAvatar(file: File): Promise<ApiResponse<{ avatarUrl: string }>>
 
-// 获取用户列表（管理员）
-getUsers(params?: QueryParams): Promise<ApiResponse<{ users: User[]; total: number }>>
+// 重置密码
+resetPassword(data: ResetPasswordRequest): Promise<ApiResponse<void>>
+
+// 修改密码
+changePassword(data: ChangePasswordRequest): Promise<ApiResponse<void>>
+
+// 验证邮箱
+verifyEmail(data: VerifyEmailRequest): Promise<ApiResponse<void>>
+
+// 发送验证码
+sendVerificationCode(data: SendVerificationCodeRequest): Promise<ApiResponse<void>>
+
+// 刷新访问令牌
+refreshToken(refreshToken: string): Promise<ApiResponse<{ token: string; refreshToken: string }>>
+
+// 删除用户账户
+deleteAccount(): Promise<ApiResponse<void>>
 ```
 
-### 通用服务 (commonService.ts)
+### 用户管理模块 (`/api/user`)
 
 ```typescript
-// GET 请求
-get<T>(url: string, params?: Record<string, any>): Promise<ApiResponse<T>>
+import { getUsers, createUser, updateUser, deleteUser } from '@/api/user';
+import type { User, CreateUserRequest, UpdateUserRequest } from '@/api/user/type';
 
-// POST 请求
-post<T>(url: string, data?: any): Promise<ApiResponse<T>>
+// 获取用户列表
+getUsers(params?: UserListParams): Promise<ApiResponse<UserListResponse>>
 
-// PUT 请求
-put<T>(url: string, data?: any): Promise<ApiResponse<T>>
+// 获取单个用户信息
+getUser(id: string): Promise<ApiResponse<User>>
 
-// DELETE 请求
-del<T>(url: string): Promise<ApiResponse<T>>
+// 创建用户
+createUser(data: CreateUserRequest): Promise<ApiResponse<User>>
 
-// PATCH 请求
-patch<T>(url: string, data?: any): Promise<ApiResponse<T>>
+// 更新用户信息
+updateUser(id: string, data: UpdateUserRequest): Promise<ApiResponse<User>>
 
-// 文件上传
-uploadFile<T>(url: string, file: File, onProgress?: (progress: number) => void): Promise<ApiResponse<T>>
+// 删除用户
+deleteUser(id: string): Promise<ApiResponse<void>>
 
-// 批量文件上传
-uploadFiles<T>(url: string, files: File[], onProgress?: (progress: number) => void): Promise<ApiResponse<T>>
+// 批量删除用户
+batchDeleteUsers(ids: string[]): Promise<ApiResponse<void>>
+
+// 获取用户统计信息
+getUserStats(): Promise<ApiResponse<UserStats>>
+
+// 激活用户
+activateUser(id: string): Promise<ApiResponse<User>>
+
+// 停用用户
+deactivateUser(id: string): Promise<ApiResponse<User>>
+
+// 封禁用户
+banUser(id: string, reason?: string): Promise<ApiResponse<User>>
+
+// 解封用户
+unbanUser(id: string): Promise<ApiResponse<User>>
+
+// 重置用户密码
+resetUserPassword(id: string): Promise<ApiResponse<{ newPassword: string }>>
+
+// 导出用户数据
+exportUsers(params?: UserListParams): Promise<ApiResponse<{ downloadUrl: string }>>
 ```
 
-## 🎣 自定义 Hook
-
-### useApi
-
-最通用的 Hook，可以自定义所有行为：
+### 文章管理模块 (`/api/article`)
 
 ```typescript
-const apiCall = useApi(someApiFunction, {
-  showError: true,        // 是否显示错误消息
-  showSuccess: false,     // 是否显示成功消息
-  successMessage: '操作成功',
-  errorMessage: '操作失败',
-  onSuccess: (data) => {
-    // 成功回调
-  },
-  onError: (error) => {
-    // 错误回调
-  },
-});
+import { getArticles, createArticle, updateArticle, deleteArticle } from '@/api/article';
+import type { Article, CreateArticleRequest, UpdateArticleRequest } from '@/api/article/type';
 
-// 返回状态
-const { data, loading, error, execute, reset } = apiCall;
+// 获取文章列表
+getArticles(params?: ArticleListParams): Promise<ApiResponse<ArticleListResponse>>
+
+// 获取单个文章信息
+getArticle(id: string): Promise<ApiResponse<Article>>
+
+// 创建文章
+createArticle(data: CreateArticleRequest): Promise<ApiResponse<Article>>
+
+// 更新文章信息
+updateArticle(id: string, data: UpdateArticleRequest): Promise<ApiResponse<Article>>
+
+// 删除文章
+deleteArticle(id: string): Promise<ApiResponse<void>>
+
+// 批量删除文章
+batchDeleteArticles(ids: string[]): Promise<ApiResponse<void>>
+
+// 发布文章
+publishArticle(id: string): Promise<ApiResponse<Article>>
+
+// 取消发布文章
+unpublishArticle(id: string): Promise<ApiResponse<Article>>
+
+// 归档文章
+archiveArticle(id: string): Promise<ApiResponse<Article>>
+
+// 获取文章统计信息
+getArticleStats(): Promise<ApiResponse<ArticleStats>>
+
+// 获取文章分类列表
+getCategories(): Promise<ApiResponse<Category[]>>
+
+// 创建文章分类
+createCategory(data: { name: string; description?: string; parentId?: string }): Promise<ApiResponse<Category>>
+
+// 更新文章分类
+updateCategory(id: string, data: { name?: string; description?: string; parentId?: string }): Promise<ApiResponse<Category>>
+
+// 删除文章分类
+deleteCategory(id: string): Promise<ApiResponse<void>>
+
+// 获取文章评论列表
+getArticleComments(articleId: string): Promise<ApiResponse<Comment[]>>
+
+// 创建文章评论
+createArticleComment(articleId: string, data: CreateCommentRequest): Promise<ApiResponse<Comment>>
+
+// 删除文章评论
+deleteArticleComment(articleId: string, commentId: string): Promise<ApiResponse<void>>
+
+// 点赞文章
+likeArticle(id: string): Promise<ApiResponse<void>>
+
+// 取消点赞文章
+unlikeArticle(id: string): Promise<ApiResponse<void>>
+
+// 增加文章浏览量
+incrementArticleView(id: string): Promise<ApiResponse<void>>
 ```
 
-### useFetch
 
-用于数据获取，支持立即执行：
-
-```typescript
-const userInfo = useFetch(getCurrentUser, {
-  immediate: true,        // 组件挂载时自动执行
-  showError: true,
-  onSuccess: (data) => {
-    console.log('获取成功:', data);
-  },
-});
-```
-
-### useSubmit
-
-用于表单提交，自动显示成功/错误消息：
-
-```typescript
-const loginSubmit = useSubmit(login, {
-  successMessage: '登录成功！',
-  errorMessage: '登录失败',
-  onSuccess: (data) => {
-    // 登录成功后的处理
-  },
-});
-```
 
 ## 🔧 配置说明
 
@@ -215,11 +318,33 @@ const loginSubmit = useSubmit(login, {
 
 ## 📝 最佳实践
 
-### 1. 错误处理
+### 1. 模块化设计
+
+- 按功能模块组织 API
+- 每个模块包含 `index.ts`（API 方法）和 `type.ts`（类型定义）
+- 遵循 RESTful API 规范
+
+### 2. 类型安全
+
+```typescript
+import type { LoginRequest, User } from '@/api/login/type';
+
+const handleLogin = async (data: LoginRequest): Promise<User | null> => {
+  try {
+    const response = await login(data);
+    return response.success ? response.data.user : null;
+  } catch (error) {
+    console.error('登录失败:', error);
+    return null;
+  }
+};
+```
+
+### 3. 错误处理
 
 ```typescript
 try {
-  const response = await api.get('/users');
+  const response = await get('/users');
   // 处理成功响应
 } catch (error) {
   // 错误已经被拦截器处理，这里可以做额外处理
@@ -227,7 +352,7 @@ try {
 }
 ```
 
-### 2. 加载状态
+### 4. 加载状态
 
 ```typescript
 const [loading, setLoading] = useState(false);
@@ -235,27 +360,14 @@ const [loading, setLoading] = useState(false);
 const handleSubmit = async () => {
   setLoading(true);
   try {
-    await api.post('/submit', data);
+    await post('/submit', data);
   } finally {
     setLoading(false);
   }
 };
 ```
 
-### 3. 类型安全
-
-```typescript
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
-
-const response = await api.get<User>('/users/1');
-const user: User = response.data;
-```
-
-### 4. 环境变量
+### 5. 环境变量
 
 在 `.env` 文件中设置 API 基础 URL：
 
@@ -265,15 +377,15 @@ REACT_APP_API_BASE_URL=http://localhost:3001/api
 
 ## 🎯 示例组件
 
-项目提供了两个示例组件：
+项目提供了一个完整的示例组件：
 
-1. **ApiDemo**: 基础 API 调用示例
-2. **ApiDemoWithHooks**: 使用自定义 Hook 的示例
+1. **ApiDemo**: 模块化 API 使用示例，展示了登录、用户信息获取、用户列表和文章列表等功能
 
-这些组件展示了如何在实际项目中使用 API 功能。
+这个组件展示了如何在实际项目中使用 API 功能。
 
 ## 📚 相关文档
 
 - [Axios 官方文档](https://axios-http.com/)
-- [React Hook 文档](https://react.dev/reference/react/hooks)
+
 - [TypeScript 文档](https://www.typescriptlang.org/docs/)
+- [RESTful API 设计指南](https://restfulapi.net/)

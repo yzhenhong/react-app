@@ -3,11 +3,11 @@
  * @Date: 2025-01-27 10:00:00
  * @LastEditors: yangzhenhong
  * @LastEditTime: 2025-01-27 10:00:00
- * @FilePath: \react-app\src\api\services\commonService.ts
- * @Description: 通用 API 服务
+ * @FilePath: \react-app\src\api\index.ts
+ * @Description: 通用 API 方法封装
  */
 
-import { api, ApiResponse } from '@/api/config';
+import { api, ApiResponse } from './config';
 
 /**
  * 通用 GET 请求
@@ -69,11 +69,15 @@ export const put = async <T = any>(
 /**
  * 通用 DELETE 请求
  * @param url 请求地址
+ * @param data 请求数据（可选，用于批量删除等场景）
  * @returns 响应数据
  */
-export const del = async <T = any>(url: string): Promise<ApiResponse<T>> => {
+export const del = async <T = any>(
+  url: string,
+  data?: any
+): Promise<ApiResponse<T>> => {
   try {
-    const response = await api.delete<ApiResponse<T>>(url);
+    const response = await api.delete<ApiResponse<T>>(url, { data });
     return response.data;
   } catch (error) {
     console.error(`DELETE 请求失败 ${url}:`, error);
@@ -173,3 +177,7 @@ export const uploadFiles = async <T = any>(
     throw error;
   }
 };
+
+// 导出配置
+export { api } from './config';
+export type { ApiResponse } from './config';

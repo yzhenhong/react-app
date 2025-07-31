@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Form, Input, Button, Card, Space, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { useSubmit } from '@/api/hooks/useApi';
-import { login } from '@/api/services/userService';
+import { login } from '@/api/login';
 import { useDispatch } from 'react-redux';
 import { login as loginAction } from '@/store/slices/userSlice';
+import { message } from 'antd';
 import './index.less';
 
 import LayoutBlank from '@/layout/blank/blank';
@@ -18,33 +18,40 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const [loading, setLoading] = React.useState(false);
 
-  // 使用自定义 Hook 处理登录
-  const loginSubmit = useSubmit(login, {
-    successMessage: '登录成功！',
-    errorMessage: '登录失败，请检查邮箱和密码',
-    onSuccess: data => {
-      // 保存 token
-      localStorage.setItem('token', data.token);
+  const handleLogin = async (values: { email: string; password: string }) => {
+    setLoading(true);
+    try {
+      const response = await login(values);
 
-      // 更新 Redux 状态
-      dispatch(
-        loginAction({
-          id: data.user.id,
-          name: data.user.name,
-          email: data.user.email,
-          avatar: data.user.avatar || '',
-          role: data.user.role,
-        })
-      );
+      if (response.success) {
+        // 保存 token
+        localStorage.setItem('token', response.data.token);
 
-      // 跳转到欢迎页面
-      navigate('/welcome');
-    },
-  });
+        // 更新 Redux 状态
+        dispatch(
+          loginAction({
+            id: response.data.user.id,
+            name: response.data.user.name,
+            email: response.data.user.email,
+            avatar: response.data.user.avatar || '',
+            role: response.data.user.role,
+          })
+        );
 
-  const handleLogin = (values: { email: string; password: string }) => {
-    loginSubmit.execute(values);
+        message.success('登录成功！');
+        // 跳转到欢迎页面
+        navigate('/welcome');
+      } else {
+        message.error(response.message || '登录失败，请检查邮箱和密码');
+      }
+    } catch (error) {
+      console.error('登录失败:', error);
+      message.error('登录失败，请检查网络连接');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const header = (
@@ -101,11 +108,11 @@ const Login: React.FC = () => {
               <Button
                 type='primary'
                 htmlType='submit'
-                loading={loginSubmit.loading}
+                loading={loading}
                 size='large'
                 block
               >
-                {loginSubmit.loading ? '登录中...' : t('common.submit')}
+                {loading ? '登录中...' : t('common.submit')}
               </Button>
             </Form.Item>
           </Form>

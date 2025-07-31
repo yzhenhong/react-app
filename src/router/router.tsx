@@ -23,7 +23,6 @@ import Login from '@/pages/login';
 import I18nDemo from '@/pages/i18n-demo';
 import Error from '@/pages/error';
 import ApiDemo from '@/components/ApiDemo';
-import ApiDemoWithHooks from '@/components/ApiDemoWithHooks';
 
 /**
  * 路由配置接口
@@ -116,15 +115,6 @@ export const routes: RouteConfig[] = [
         element: React.createElement(ApiDemo),
         meta: {
           title: 'API 演示',
-          layout: 'default',
-        },
-      },
-      {
-        path: '/api-demo-with-hooks',
-        name: 'ApiDemoWithHooks',
-        element: React.createElement(ApiDemoWithHooks),
-        meta: {
-          title: 'API 演示（自定义 Hook）',
           layout: 'default',
         },
       },
