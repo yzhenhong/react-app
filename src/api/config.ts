@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-01-27 10:00:00
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-01-27 10:00:00
+ * @LastEditTime: 2025-07-31 16:47:21
  * @FilePath: \react-app\src\api\config.ts
  * @Description: Axios 配置文件
  */
@@ -28,7 +28,7 @@ const api: AxiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api',
 
   // 请求超时时间
-  timeout: 10000,
+  timeout: 1000 * 15,
 
   // 请求头
   headers: {
