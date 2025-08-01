@@ -8,7 +8,6 @@
  */
 
 import { get, post, put, del } from '@/api';
-import type { ApiResponse } from '@/api';
 import type {
   Article,
   ArticleListParams,
@@ -27,9 +26,7 @@ import type {
  * @param params 查询参数
  * @returns 文章列表
  */
-export const getArticles = async (
-  params?: ArticleListParams
-): Promise<ApiResponse<ArticleListResponse>> => {
+export const getArticles = async (params?: ArticleListParams) => {
   return get<ArticleListResponse>('/articles', params);
 };
 
@@ -39,7 +36,7 @@ export const getArticles = async (
  * @param id 文章ID
  * @returns 文章信息
  */
-export const getArticle = async (id: string): Promise<ApiResponse<Article>> => {
+export const getArticle = async (id: string) => {
   return get<Article>(`/articles/${id}`);
 };
 
@@ -49,9 +46,7 @@ export const getArticle = async (id: string): Promise<ApiResponse<Article>> => {
  * @param data 文章信息
  * @returns 创建的文章信息
  */
-export const createArticle = async (
-  data: CreateArticleRequest
-): Promise<ApiResponse<Article>> => {
+export const createArticle = async (data: CreateArticleRequest) => {
   return post<Article>('/articles', data);
 };
 
@@ -62,10 +57,7 @@ export const createArticle = async (
  * @param data 更新的文章信息
  * @returns 更新后的文章信息
  */
-export const updateArticle = async (
-  id: string,
-  data: UpdateArticleRequest
-): Promise<ApiResponse<Article>> => {
+export const updateArticle = async (id: string, data: UpdateArticleRequest) => {
   return put<Article>(`/articles/${id}`, data);
 };
 
@@ -75,7 +67,7 @@ export const updateArticle = async (
  * @param id 文章ID
  * @returns 删除响应
  */
-export const deleteArticle = async (id: string): Promise<ApiResponse<void>> => {
+export const deleteArticle = async (id: string) => {
   return del<void>(`/articles/${id}`);
 };
 
@@ -85,9 +77,7 @@ export const deleteArticle = async (id: string): Promise<ApiResponse<void>> => {
  * @param ids 文章ID数组
  * @returns 批量删除响应
  */
-export const batchDeleteArticles = async (
-  ids: string[]
-): Promise<ApiResponse<void>> => {
+export const batchDeleteArticles = async (ids: string[]) => {
   const idsParam = ids.join(',');
   return del<void>(`/articles/batch?ids=${idsParam}`);
 };
@@ -98,9 +88,7 @@ export const batchDeleteArticles = async (
  * @param id 文章ID
  * @returns 发布响应
  */
-export const publishArticle = async (
-  id: string
-): Promise<ApiResponse<Article>> => {
+export const publishArticle = async (id: string) => {
   return put<Article>(`/articles/${id}/publish`);
 };
 
@@ -110,9 +98,7 @@ export const publishArticle = async (
  * @param id 文章ID
  * @returns 取消发布响应
  */
-export const unpublishArticle = async (
-  id: string
-): Promise<ApiResponse<Article>> => {
+export const unpublishArticle = async (id: string) => {
   return put<Article>(`/articles/${id}/unpublish`);
 };
 
@@ -122,9 +108,7 @@ export const unpublishArticle = async (
  * @param id 文章ID
  * @returns 归档响应
  */
-export const archiveArticle = async (
-  id: string
-): Promise<ApiResponse<Article>> => {
+export const archiveArticle = async (id: string) => {
   return put<Article>(`/articles/${id}/archive`);
 };
 
@@ -133,7 +117,7 @@ export const archiveArticle = async (
  * GET /articles/stats
  * @returns 文章统计信息
  */
-export const getArticleStats = async (): Promise<ApiResponse<ArticleStats>> => {
+export const getArticleStats = async () => {
   return get<ArticleStats>('/articles/stats');
 };
 
@@ -142,7 +126,7 @@ export const getArticleStats = async (): Promise<ApiResponse<ArticleStats>> => {
  * GET /articles/categories
  * @returns 分类列表
  */
-export const getCategories = async (): Promise<ApiResponse<Category[]>> => {
+export const getCategories = async () => {
   return get<Category[]>('/articles/categories');
 };
 
@@ -156,7 +140,7 @@ export const createCategory = async (data: {
   name: string;
   description?: string;
   parentId?: string;
-}): Promise<ApiResponse<Category>> => {
+}) => {
   return post<Category>('/articles/categories', data);
 };
 
@@ -170,7 +154,7 @@ export const createCategory = async (data: {
 export const updateCategory = async (
   id: string,
   data: { name?: string; description?: string; parentId?: string }
-): Promise<ApiResponse<Category>> => {
+) => {
   return put<Category>(`/articles/categories/${id}`, data);
 };
 
@@ -180,9 +164,7 @@ export const updateCategory = async (
  * @param id 分类ID
  * @returns 删除响应
  */
-export const deleteCategory = async (
-  id: string
-): Promise<ApiResponse<void>> => {
+export const deleteCategory = async (id: string) => {
   return del<void>(`/articles/categories/${id}`);
 };
 
@@ -192,9 +174,7 @@ export const deleteCategory = async (
  * @param articleId 文章ID
  * @returns 评论列表
  */
-export const getArticleComments = async (
-  articleId: string
-): Promise<ApiResponse<Comment[]>> => {
+export const getArticleComments = async (articleId: string) => {
   return get<Comment[]>(`/articles/${articleId}/comments`);
 };
 
@@ -208,7 +188,7 @@ export const getArticleComments = async (
 export const createArticleComment = async (
   articleId: string,
   data: CreateCommentRequest
-): Promise<ApiResponse<Comment>> => {
+) => {
   return post<Comment>(`/articles/${articleId}/comments`, data);
 };
 
@@ -222,7 +202,7 @@ export const createArticleComment = async (
 export const deleteArticleComment = async (
   articleId: string,
   commentId: string
-): Promise<ApiResponse<void>> => {
+) => {
   return del<void>(`/articles/${articleId}/comments/${commentId}`);
 };
 
@@ -232,7 +212,7 @@ export const deleteArticleComment = async (
  * @param id 文章ID
  * @returns 点赞响应
  */
-export const likeArticle = async (id: string): Promise<ApiResponse<void>> => {
+export const likeArticle = async (id: string) => {
   return post<void>(`/articles/${id}/like`);
 };
 
@@ -242,7 +222,7 @@ export const likeArticle = async (id: string): Promise<ApiResponse<void>> => {
  * @param id 文章ID
  * @returns 取消点赞响应
  */
-export const unlikeArticle = async (id: string): Promise<ApiResponse<void>> => {
+export const unlikeArticle = async (id: string) => {
   return del<void>(`/articles/${id}/like`);
 };
 
@@ -252,8 +232,6 @@ export const unlikeArticle = async (id: string): Promise<ApiResponse<void>> => {
  * @param id 文章ID
  * @returns 增加浏览量响应
  */
-export const incrementArticleView = async (
-  id: string
-): Promise<ApiResponse<void>> => {
+export const incrementArticleView = async (id: string) => {
   return post<void>(`/articles/${id}/view`);
 };

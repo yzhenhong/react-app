@@ -8,7 +8,6 @@
  */
 
 import { get, post, put, del } from '@/api';
-import type { ApiResponse } from '@/api';
 import type {
   User,
   UserListParams,
@@ -24,9 +23,7 @@ import type {
  * @param params 查询参数
  * @returns 用户列表
  */
-export const getUsers = async (
-  params?: UserListParams
-): Promise<ApiResponse<UserListResponse>> => {
+export const getUsers = async (params?: UserListParams) => {
   return get<UserListResponse>('/users', params);
 };
 
@@ -36,7 +33,7 @@ export const getUsers = async (
  * @param id 用户ID
  * @returns 用户信息
  */
-export const getUser = async (id: string): Promise<ApiResponse<User>> => {
+export const getUser = async (id: string) => {
   return get<User>(`/users/${id}`);
 };
 
@@ -46,9 +43,7 @@ export const getUser = async (id: string): Promise<ApiResponse<User>> => {
  * @param data 用户信息
  * @returns 创建的用户信息
  */
-export const createUser = async (
-  data: CreateUserRequest
-): Promise<ApiResponse<User>> => {
+export const createUser = async (data: CreateUserRequest) => {
   return post<User>('/users', data);
 };
 
@@ -59,10 +54,7 @@ export const createUser = async (
  * @param data 更新的用户信息
  * @returns 更新后的用户信息
  */
-export const updateUser = async (
-  id: string,
-  data: UpdateUserRequest
-): Promise<ApiResponse<User>> => {
+export const updateUser = async (id: string, data: UpdateUserRequest) => {
   return put<User>(`/users/${id}`, data);
 };
 
@@ -72,7 +64,7 @@ export const updateUser = async (
  * @param id 用户ID
  * @returns 删除响应
  */
-export const deleteUser = async (id: string): Promise<ApiResponse<void>> => {
+export const deleteUser = async (id: string) => {
   return del<void>(`/users/${id}`);
 };
 
@@ -82,9 +74,7 @@ export const deleteUser = async (id: string): Promise<ApiResponse<void>> => {
  * @param ids 用户ID数组
  * @returns 批量删除响应
  */
-export const batchDeleteUsers = async (
-  ids: string[]
-): Promise<ApiResponse<void>> => {
+export const batchDeleteUsers = async (ids: string[]) => {
   const idsParam = ids.join(',');
   return del<void>(`/users/batch?ids=${idsParam}`);
 };
@@ -94,7 +84,7 @@ export const batchDeleteUsers = async (
  * GET /users/stats
  * @returns 用户统计信息
  */
-export const getUserStats = async (): Promise<ApiResponse<UserStats>> => {
+export const getUserStats = async () => {
   return get<UserStats>('/users/stats');
 };
 
@@ -104,7 +94,7 @@ export const getUserStats = async (): Promise<ApiResponse<UserStats>> => {
  * @param id 用户ID
  * @returns 激活响应
  */
-export const activateUser = async (id: string): Promise<ApiResponse<User>> => {
+export const activateUser = async (id: string) => {
   return put<User>(`/users/${id}/activate`);
 };
 
@@ -114,9 +104,7 @@ export const activateUser = async (id: string): Promise<ApiResponse<User>> => {
  * @param id 用户ID
  * @returns 停用响应
  */
-export const deactivateUser = async (
-  id: string
-): Promise<ApiResponse<User>> => {
+export const deactivateUser = async (id: string) => {
   return put<User>(`/users/${id}/deactivate`);
 };
 
@@ -127,10 +115,7 @@ export const deactivateUser = async (
  * @param reason 封禁原因
  * @returns 封禁响应
  */
-export const banUser = async (
-  id: string,
-  reason?: string
-): Promise<ApiResponse<User>> => {
+export const banUser = async (id: string, reason?: string) => {
   return put<User>(`/users/${id}/ban`, { reason });
 };
 
@@ -140,7 +125,7 @@ export const banUser = async (
  * @param id 用户ID
  * @returns 解封响应
  */
-export const unbanUser = async (id: string): Promise<ApiResponse<User>> => {
+export const unbanUser = async (id: string) => {
   return put<User>(`/users/${id}/unban`);
 };
 
@@ -150,9 +135,7 @@ export const unbanUser = async (id: string): Promise<ApiResponse<User>> => {
  * @param id 用户ID
  * @returns 重置密码响应
  */
-export const resetUserPassword = async (
-  id: string
-): Promise<ApiResponse<{ newPassword: string }>> => {
+export const resetUserPassword = async (id: string) => {
   return put<{ newPassword: string }>(`/users/${id}/reset-password`);
 };
 
@@ -162,8 +145,6 @@ export const resetUserPassword = async (
  * @param params 导出参数
  * @returns 导出文件URL
  */
-export const exportUsers = async (
-  params?: UserListParams
-): Promise<ApiResponse<{ downloadUrl: string }>> => {
+export const exportUsers = async (params?: UserListParams) => {
   return get<{ downloadUrl: string }>('/users/export', params);
 };

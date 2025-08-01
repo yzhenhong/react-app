@@ -7,7 +7,7 @@
 ```
 src/api/
 ├── config.ts          # Axios 基础配置
-├── index.ts           # 通用 API 方法封装
+├── index.ts           # 通用 API 方法封装（已优化类型处理）
 ├── login/             # 登录模块
 │   ├── index.ts       # 登录相关 API
 │   └── type.ts        # 登录模块类型定义
@@ -124,6 +124,63 @@ const MyComponent = () => {
 };
 ```
 
+## 🔧 类型处理优化
+
+### 优化背景
+
+在项目开发过程中，我们发现每个 API 模块都需要单独引入 `ApiResponse` 类型，导致代码重复和维护成本增加。
+
+### 优化方案
+
+通过在 `src/api/index.ts` 中的通用请求方法（get、post、put、del、patch、uploadFile等）直接处理 `ApiResponse` 类型，各个 API 模块完全不需要引入任何额外的类型。
+
+### 优化对比
+
+**优化前：**
+```typescript
+import { get, post, put, del } from '@/api';
+import type { ApiResponse } from '@/api';
+
+export const getUser = async (id: string): Promise<ApiResponse<User>> => {
+  return get<User>(`/users/${id}`);
+};
+```
+
+**优化后：**
+```typescript
+import { get, post, put, del } from '@/api';
+
+export const getUser = async (id: string) => {
+  return get<User>(`/users/${id}`);
+};
+```
+
+### 优化效果
+
+- ✅ **完全消除类型引入重复** - 各个模块不再需要引入 `ApiResponse` 或任何其他额外类型
+- ✅ **简化代码结构** - API函数定义更加简洁
+- ✅ **保持类型安全** - TypeScript类型推断正常工作
+- ✅ **提高可维护性** - 统一的API调用方式
+- ✅ **减少代码量** - 每个API函数减少了类型声明代码
+
+### 使用方法
+
+现在创建新的API模块时，只需要：
+
+1. **导入基础HTTP方法**：
+```typescript
+import { get, post, put, del, patch, uploadFile } from '@/api';
+```
+
+2. **直接使用这些方法**，无需任何额外的类型引入：
+```typescript
+export const myApiFunction = async (params) => {
+  return get<MyDataType>('/my-endpoint', params);
+};
+```
+
+3. **TypeScript会自动推断返回类型**为 `Promise<ApiResponse<T>>`
+
 ## 📋 模块化 API
 
 项目按功能模块组织 API，每个模块包含：
@@ -141,7 +198,7 @@ const MyComponent = () => {
 在 `src/api/config.ts` 中配置了：
 
 - **基础 URL**: 根据环境变量设置
-- **超时时间**: xx 秒
+- **超时时间**: 15 秒
 - **请求头**: 自动设置 Content-Type
 - **凭证**: 支持跨域请求携带凭证
 
@@ -222,6 +279,45 @@ const handleSubmit = async () => {
 
 ```env
 REACT_APP_API_BASE_URL=http://localhost:3001/api
+```
+
+### 6. 创建新的API模块
+
+按照以下步骤创建新的API模块：
+
+1. **创建模块目录**：
+```
+src/api/your-module/
+├── index.ts       # API 方法
+└── type.ts        # 类型定义
+```
+
+2. **定义类型**（在 `type.ts` 中）：
+```typescript
+export interface YourDataType {
+  id: string;
+  name: string;
+  // ... 其他字段
+}
+
+export interface CreateYourDataRequest {
+  name: string;
+  // ... 其他字段
+}
+```
+
+3. **实现API方法**（在 `index.ts` 中）：
+```typescript
+import { get, post, put, del } from '@/api';
+import type { YourDataType, CreateYourDataRequest } from './type';
+
+export const getYourData = async (id: string) => {
+  return get<YourDataType>(`/your-endpoint/${id}`);
+};
+
+export const createYourData = async (data: CreateYourDataRequest) => {
+  return post<YourDataType>('/your-endpoint', data);
+};
 ```
 
 ## 🎯 示例组件

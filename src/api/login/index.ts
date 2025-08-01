@@ -8,7 +8,6 @@
  */
 
 import { post, get, put, del } from '@/api';
-import type { ApiResponse } from '@/api';
 import type {
   LoginRequest,
   LoginResponse,
@@ -27,9 +26,7 @@ import type {
  * @param data 登录信息
  * @returns 登录响应数据
  */
-export const login = async (
-  data: LoginRequest
-): Promise<ApiResponse<LoginResponse>> => {
+export const login = async (data: LoginRequest) => {
   return post<LoginResponse>('/auth/login', data);
 };
 
@@ -39,9 +36,7 @@ export const login = async (
  * @param data 注册信息
  * @returns 注册响应数据
  */
-export const register = async (
-  data: RegisterRequest
-): Promise<ApiResponse<User>> => {
+export const register = async (data: RegisterRequest) => {
   return post<User>('/auth/register', data);
 };
 
@@ -50,7 +45,7 @@ export const register = async (
  * POST /auth/logout
  * @returns 登出响应数据
  */
-export const logout = async (): Promise<ApiResponse<void>> => {
+export const logout = async () => {
   return post<void>('/auth/logout');
 };
 
@@ -59,7 +54,7 @@ export const logout = async (): Promise<ApiResponse<void>> => {
  * GET /auth/me
  * @returns 用户信息
  */
-export const getCurrentUser = async (): Promise<ApiResponse<User>> => {
+export const getCurrentUser = async () => {
   return get<User>('/auth/me');
 };
 
@@ -69,9 +64,7 @@ export const getCurrentUser = async (): Promise<ApiResponse<User>> => {
  * @param data 更新的用户信息
  * @returns 更新后的用户信息
  */
-export const updateUser = async (
-  data: UpdateUserRequest
-): Promise<ApiResponse<User>> => {
+export const updateUser = async (data: UpdateUserRequest) => {
   return put<User>('/auth/profile', data);
 };
 
@@ -81,9 +74,7 @@ export const updateUser = async (
  * @param file 头像文件
  * @returns 头像URL
  */
-export const uploadAvatar = async (
-  file: File
-): Promise<ApiResponse<{ avatarUrl: string }>> => {
+export const uploadAvatar = async (file: File) => {
   const formData = new FormData();
   formData.append('avatar', file);
 
@@ -96,9 +87,7 @@ export const uploadAvatar = async (
  * @param data 重置密码信息
  * @returns 重置密码响应
  */
-export const resetPassword = async (
-  data: ResetPasswordRequest
-): Promise<ApiResponse<void>> => {
+export const resetPassword = async (data: ResetPasswordRequest) => {
   return post<void>('/auth/reset-password', data);
 };
 
@@ -108,9 +97,7 @@ export const resetPassword = async (
  * @param data 修改密码信息
  * @returns 修改密码响应
  */
-export const changePassword = async (
-  data: ChangePasswordRequest
-): Promise<ApiResponse<void>> => {
+export const changePassword = async (data: ChangePasswordRequest) => {
   return put<void>('/auth/change-password', data);
 };
 
@@ -120,9 +107,7 @@ export const changePassword = async (
  * @param data 验证邮箱信息
  * @returns 验证邮箱响应
  */
-export const verifyEmail = async (
-  data: VerifyEmailRequest
-): Promise<ApiResponse<void>> => {
+export const verifyEmail = async (data: VerifyEmailRequest) => {
   return post<void>('/auth/verify-email', data);
 };
 
@@ -134,7 +119,7 @@ export const verifyEmail = async (
  */
 export const sendVerificationCode = async (
   data: SendVerificationCodeRequest
-): Promise<ApiResponse<void>> => {
+) => {
   return post<void>('/auth/send-verification-code', data);
 };
 
@@ -144,9 +129,7 @@ export const sendVerificationCode = async (
  * @param refreshToken 刷新令牌
  * @returns 新的访问令牌
  */
-export const refreshToken = async (
-  refreshToken: string
-): Promise<ApiResponse<{ token: string; refreshToken: string }>> => {
+export const refreshToken = async (refreshToken: string) => {
   return post<{ token: string; refreshToken: string }>('/auth/refresh-token', {
     refreshToken,
   });
@@ -157,6 +140,6 @@ export const refreshToken = async (
  * DELETE /auth/account
  * @returns 删除账户响应
  */
-export const deleteAccount = async (): Promise<ApiResponse<void>> => {
+export const deleteAccount = async () => {
   return del<void>('/auth/account');
 };
