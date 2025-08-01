@@ -1,3 +1,12 @@
+/*
+ * @Author: yangzhenhong
+ * @Date: 2025-07-29 13:56:20
+ * @LastEditors: yangzhenhong
+ * @LastEditTime: 2025-08-01 14:27:58
+ * @FilePath: \react-app\craco.config.ts
+ * @Description:
+ */
+
 /**
  * CRACO 配置文件
  *
@@ -8,6 +17,7 @@
  * - 配置路径别名 (@/ 指向 src/)
  * - 集成 Less 预处理器
  * - 配置 ESLint
+ * - 配置开发服务器代理
  */
 
 import path from 'path';
@@ -20,6 +30,26 @@ const cracoConfig = {
     // 路径别名配置 - 简化导入路径
     alias: {
       '@': path.resolve(__dirname, 'src'),
+    },
+    // 开发服务器配置
+    configure: (webpackConfig: any, { env }: any) => {
+      // 只在开发环境配置代理
+      if (env === 'development') {
+        // 配置开发服务器代理
+        webpackConfig.devServer = {
+          ...webpackConfig.devServer,
+          proxy: {
+            '/user': {
+              target: process.env.REACT_APP_API_BASE_URL,
+              changeOrigin: true,
+              pathRewrite: {
+                '^/user': '/user',
+              },
+            },
+          },
+        };
+      }
+      return webpackConfig;
     },
   },
 

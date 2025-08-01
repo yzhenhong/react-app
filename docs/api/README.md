@@ -181,6 +181,122 @@ export const myApiFunction = async (params) => {
 
 3. **TypeScript会自动推断返回类型**为 `Promise<ApiResponse<T>>`
 
+## 🌐 请求代理配置
+
+### 代理配置说明
+
+项目使用 **CRACO** 配置请求代理，这是更现代和灵活的方式。代理配置位于 `craco.config.ts` 中。
+
+### CRACO 代理配置的优势
+
+相比传统的 `setupProxy.js` 方式，CRACO 代理配置具有以下优势：
+
+1. **TypeScript 支持** - 完整的类型检查和智能提示
+2. **统一配置** - 所有配置集中在一个文件中
+3. **更好的维护性** - 配置更清晰，易于管理
+4. **现代化** - 符合现代前端开发最佳实践
+5. **无额外依赖** - 不需要 `http-proxy-middleware` 依赖
+
+### 代理规则
+
+1. **API 代理**：`/api/*` → 后端服务器
+2. **文件上传代理**：`/upload/*` → 文件服务器
+3. **WebSocket 代理**：`/ws/*` → WebSocket 服务器
+
+### 环境变量配置
+
+可以通过环境变量配置代理目标：
+
+```bash
+# API 服务器地址
+REACT_APP_API_BASE_URL=http://localhost:3001
+
+# 文件上传服务器地址
+REACT_APP_UPLOAD_URL=http://localhost:3002
+
+# WebSocket 服务器地址
+REACT_APP_WS_URL=ws://localhost:3004
+```
+
+### CRACO 配置示例
+
+```typescript
+// craco.config.ts
+const cracoConfig = {
+  webpack: {
+    configure: (webpackConfig: any, { env, paths }: any) => {
+      // 只在开发环境配置代理
+      if (env === 'development') {
+        webpackConfig.devServer = {
+          ...webpackConfig.devServer,
+          proxy: {
+            // API 代理
+            '/api': {
+              target: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001',
+              changeOrigin: true,
+              pathRewrite: {
+                '^/api': '/api',
+              },
+              // 请求拦截
+              onProxyReq: (proxyReq, req, _res) => {
+                console.log(`🔄 代理请求: ${req.method} ${req.url} -> ${proxyReq.path}`);
+              },
+            },
+
+            // 文件上传代理
+            '/upload': {
+              target: process.env.REACT_APP_UPLOAD_URL || 'http://localhost:3002',
+              changeOrigin: true,
+              timeout: 30000,
+            },
+
+            // WebSocket 代理
+            '/ws': {
+              target: process.env.REACT_APP_WS_URL || 'ws://localhost:3004',
+              changeOrigin: true,
+              ws: true,
+            },
+          },
+        };
+      }
+      return webpackConfig;
+    },
+  },
+};
+```
+
+### 使用示例
+
+```typescript
+// 这些请求会自动被代理到对应的服务器
+import { get, post } from '@/api';
+
+// API 请求 - 会被代理到 http://localhost:3001/api/users
+const users = await get('/users');
+
+// 文件上传 - 会被代理到 http://localhost:3002/upload/file
+const formData = new FormData();
+formData.append('file', file);
+await fetch('/upload/file', {
+  method: 'POST',
+  body: formData
+});
+
+// WebSocket 连接 - 会被代理到 ws://localhost:3004/ws/chat
+const ws = new WebSocket('/ws/chat');
+```
+
+### 开发环境配置
+
+在开发环境中，API 配置会自动使用相对路径：
+
+```typescript
+// 开发环境：baseURL = '/api'
+// 生产环境：baseURL = 'http://localhost:3001/api'
+```
+
+这样确保了开发和生产环境的一致性。
+
 ## 📋 模块化 API
 
 项目按功能模块组织 API，每个模块包含：
@@ -333,3 +449,4 @@ export const createYourData = async (data: CreateYourDataRequest) => {
 - [Axios 官方文档](https://axios-http.com/)
 - [TypeScript 文档](https://www.typescriptlang.org/docs/)
 - [RESTful API 设计指南](https://restfulapi.net/)
+- [CRACO 官方文档](https://github.com/dilanx/craco)

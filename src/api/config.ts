@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-01-27 10:00:00
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-31 16:47:21
+ * @LastEditTime: 2025-08-01 14:09:42
  * @FilePath: \react-app\src\api\config.ts
  * @Description: Axios 配置文件
  */
@@ -22,10 +22,14 @@ export interface ApiResponse<T = any> {
   success: boolean;
 }
 
+const getBaseURL = () => {
+  return process.env.REACT_APP_API_BASE_URL;
+};
+
 // 创建 axios 实例
 const api: AxiosInstance = axios.create({
   // 基础 URL，根据环境变量设置
-  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api',
+  baseURL: getBaseURL(),
 
   // 请求超时时间
   timeout: 1000 * 15,

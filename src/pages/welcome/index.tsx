@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-29 16:14:37
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-31 10:42:00
+ * @LastEditTime: 2025-08-01 14:01:10
  * @FilePath: \react-app\src\pages\welcome\index.tsx
  * @Description: 欢迎页面 - 支持多语言
  */
