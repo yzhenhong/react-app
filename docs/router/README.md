@@ -100,6 +100,117 @@ const Navigation: React.FC = () => {
 };
 ```
 
+### 2. 懒加载路由配置
+
+项目支持类似 Vue Router 的懒加载语法，**无加载状态显示**：
+
+```typescript
+// 无加载状态的懒加载工具函数
+const lazyLoad = (importFn: () => Promise<any>) => {
+  const LazyComponent = lazy(importFn);
+  // 直接返回组件，不显示加载状态
+  return <LazyComponent />;
+};
+
+// 路由配置中使用懒加载
+const routes = [
+  {
+    path: '/welcome',
+    name: 'Welcome',
+    element: lazyLoad(() => import('@/pages/welcome')), // 类似 Vue Router 的写法
+    meta: {
+      title: '欢迎页面',
+    },
+  },
+  {
+    path: '/news',
+    name: 'News',
+    element: lazyLoad(() => import('@/pages/news')),
+    meta: {
+      title: '新闻页面',
+    },
+  },
+];
+```
+
+**懒加载的优势：**
+- **代码分割**：每个页面组件单独打包，减少初始加载时间
+- **按需加载**：只有访问对应页面时才加载相关代码
+- **性能优化**：提高应用的整体性能
+- **语法简洁**：类似 Vue Router 的写法，易于理解和使用
+- **无加载状态**：刷新页面时不会显示"页面加载中..."，用户体验更好
+
+### 3. 完整的懒加载示例
+
+```typescript
+import React, { lazy } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// 无加载状态的懒加载工具函数
+const lazyLoad = (importFn: () => Promise<any>) => {
+  const LazyComponent = lazy(importFn);
+  // 直接返回组件，不显示加载状态
+  return <LazyComponent />;
+};
+
+// 路由配置
+const routes = [
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        path: '/home',
+        element: lazyLoad(() => import('@/pages/home')),
+      },
+      {
+        path: '/about',
+        element: lazyLoad(() => import('@/pages/about')),
+      },
+      {
+        path: '/contact',
+        element: lazyLoad(() => import('@/pages/contact')),
+      },
+    ],
+  },
+];
+
+// 使用路由
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {routes.map(route => (
+          <Route key={route.path} {...route} />
+        ))}
+      </Routes>
+    </BrowserRouter>
+  );
+};
+```
+
+### 4. 懒加载 vs 同步加载对比
+
+```typescript
+// ❌ 同步加载 - 所有组件都会在初始加载时打包
+import Home from '@/pages/home';
+import About from '@/pages/about';
+import Contact from '@/pages/contact';
+
+const routes = [
+  { path: '/home', element: <Home /> },
+  { path: '/about', element: <About /> },
+  { path: '/contact', element: <Contact /> },
+];
+
+// ✅ 懒加载 - 按需加载，性能更好
+const routes = [
+  { path: '/home', element: lazyLoad(() => import('@/pages/home')) },
+  { path: '/about', element: lazyLoad(() => import('@/pages/about')) },
+  { path: '/contact', element: lazyLoad(() => import('@/pages/contact')) },
+];
+```
+
 ### 2. 编程式导航
 
 ```typescript
@@ -236,6 +347,33 @@ const renderRoute = (route: RouteConfig): React.ReactNode => {
   );
 };
 ```
+
+### 路由组件语法说明
+
+项目使用标准的 JSX 语法来定义路由组件，并支持懒加载：
+
+```typescript
+// ✅ 推荐：使用 JSX 语法（更简洁易读）
+element: <LayoutDefault />
+
+// ✅ 推荐：使用懒加载（类似 Vue Router 的写法）
+element: lazyLoad(() => import('@/pages/welcome'))
+
+// ❌ 不推荐：使用 React.createElement（虽然功能相同，但不够简洁）
+element: React.createElement(LayoutDefault)
+```
+
+**为什么使用 JSX 语法？**
+1. **更简洁易读** - 代码更短，更直观
+2. **符合 React 惯例** - 社区标准做法
+3. **TypeScript 支持更好** - 类型推断更准确
+4. **减少代码量** - 不需要额外的 React.createElement 调用
+
+**懒加载的优势：**
+1. **代码分割** - 按需加载，减少初始包大小
+2. **性能优化** - 提高首屏加载速度
+3. **类似 Vue Router** - 语法简洁，易于理解
+4. **自动加载状态** - 内置加载提示
 
 ## 📝 最佳实践
 

@@ -2,27 +2,28 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-30 15:45:00
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-31 14:53:00
+ * @LastEditTime: 2025-08-01 08:59:41
  * @FilePath: \react-app\src\router\router.tsx
- * @Description: 简化的路由配置
+ * @Description: 简化的路由配置 - 支持懒加载
  */
 
-import React from 'react';
+import React, { lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-// 布局组件
+// 布局组件 - 保持同步加载（因为布局组件通常较小且经常使用）
 import LayoutDefault from '@/layout/default/default';
 import LayoutBlank from '@/layout/blank/blank';
 
-// 页面组件
-import Welcome from '@/pages/welcome';
-import News from '@/pages/news';
-import RouterDemo from '@/components/RouterDemo';
-import LayoutDemo from '@/components/LayoutDemo';
-import Login from '@/pages/login';
-import I18nDemo from '@/pages/i18n-demo';
-import Error from '@/pages/error';
-import ApiDemo from '@/components/ApiDemo';
+/**
+ * 无加载状态的懒加载工具函数 - 类似 Vue Router 的写法
+ * @param importFn 动态导入函数
+ * @returns 懒加载组件
+ */
+const lazyLoad = (importFn: () => Promise<any>) => {
+  const LazyComponent = lazy(importFn);
+  // 直接返回组件，不显示加载状态
+  return <LazyComponent />;
+};
 
 /**
  * 路由配置接口
@@ -41,7 +42,7 @@ export interface RouteConfig {
 }
 
 /**
- * 路由配置数组（类似 Vue Router 格式）
+ * 路由配置数组（类似 Vue Router 格式，支持懒加载）
  */
 export const routes: RouteConfig[] = [
   {
@@ -52,7 +53,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/',
     name: 'DefaultLayout',
-    element: React.createElement(LayoutDefault),
+    element: <LayoutDefault />,
     meta: {
       layout: 'default',
     },
@@ -60,7 +61,7 @@ export const routes: RouteConfig[] = [
       {
         path: '/welcome',
         name: 'Welcome',
-        element: React.createElement(Welcome),
+        element: lazyLoad(() => import('@/pages/welcome')),
         meta: {
           title: '欢迎页面',
           layout: 'default',
@@ -69,14 +70,14 @@ export const routes: RouteConfig[] = [
           {
             path: '/welcome/news',
             name: 'WelcomeNews',
-            element: React.createElement(News),
+            element: lazyLoad(() => import('@/pages/news')),
           },
         ],
       },
       {
         path: '/router-demo',
         name: 'RouterDemo',
-        element: React.createElement(RouterDemo),
+        element: lazyLoad(() => import('@/components/RouterDemo')),
         meta: {
           title: '路由演示',
           layout: 'default',
@@ -85,7 +86,7 @@ export const routes: RouteConfig[] = [
       {
         path: '/layout-demo',
         name: 'LayoutDemo',
-        element: React.createElement(LayoutDemo),
+        element: lazyLoad(() => import('@/components/LayoutDemo')),
         meta: {
           title: '布局演示',
           layout: 'default',
@@ -94,7 +95,7 @@ export const routes: RouteConfig[] = [
       {
         path: '/i18n-demo',
         name: 'I18nDemo',
-        element: React.createElement(I18nDemo),
+        element: lazyLoad(() => import('@/pages/i18n-demo')),
         meta: {
           title: '多语言演示',
           layout: 'default',
@@ -103,16 +104,16 @@ export const routes: RouteConfig[] = [
       {
         path: '/news',
         name: 'News',
-        element: React.createElement(News),
+        element: lazyLoad(() => import('@/pages/news')),
         meta: {
-          title: '多语言演示',
+          title: '新闻页面',
           layout: 'default',
         },
       },
       {
         path: '/api-demo',
         name: 'ApiDemo',
-        element: React.createElement(ApiDemo),
+        element: lazyLoad(() => import('@/components/ApiDemo')),
         meta: {
           title: 'API 演示',
           layout: 'default',
@@ -123,7 +124,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/',
     name: 'BlankLayout',
-    element: React.createElement(LayoutBlank),
+    element: <LayoutBlank />,
     meta: {
       layout: 'blank',
     },
@@ -131,9 +132,9 @@ export const routes: RouteConfig[] = [
       {
         path: '/error',
         name: 'Error',
-        element: React.createElement(Error),
+        element: lazyLoad(() => import('@/pages/error')),
         meta: {
-          title: '新闻页面',
+          title: '错误页面',
           layout: 'blank',
         },
       },
@@ -142,7 +143,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/login',
     name: 'Login',
-    element: React.createElement(Login),
+    element: lazyLoad(() => import('@/pages/login')),
     meta: {
       title: '登录页面',
       layout: 'default',

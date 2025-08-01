@@ -10,7 +10,7 @@
 - 🔧 **ESLint** - 代码质量检查和规范
 - 💅 **Prettier** - 代码格式化工具
 - ⚡ **CRACO** - Create React App 配置覆盖工具
-- 🛣️ **React Router** - 单页面应用路由管理
+- 🛣️ **React Router** - 单页面应用路由管理（支持懒加载）
 - 🎨 **Less** - CSS 预处理器支持
 - 🌐 **i18n** - 国际化支持
 - 📡 **Axios** - HTTP 客户端
@@ -143,6 +143,12 @@ A: 修改 `.prettierrc` 文件中的配置项。
 
 ### Q: 如何添加新的路径别名？
 A: 在 `craco.config.ts` 文件的 `webpack.alias` 部分添加新的别名。
+
+### Q: 路由配置中应该使用 JSX 语法还是 React.createElement？
+A: 推荐使用 JSX 语法（如 `<Component />`），因为它更简洁、更符合 React 惯例，且 TypeScript 支持更好。
+
+### Q: 如何实现类似 Vue Router 的懒加载？
+A: 项目已内置 `lazyLoad` 工具函数，可以直接使用 `element: lazyLoad(() => import('@/pages/component'))` 实现懒加载，语法类似 Vue Router。该实现无加载状态显示，刷新页面时不会出现"页面加载中..."提示。
 
 ## 📦 构建和部署
 
