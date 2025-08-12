@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-29 13:56:20
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-08-01 14:27:58
+ * @LastEditTime: 2025-08-12 11:25:57
  * @FilePath: \react-app\craco.config.ts
  * @Description:
  */
@@ -39,11 +39,11 @@ const cracoConfig = {
         webpackConfig.devServer = {
           ...webpackConfig.devServer,
           proxy: {
-            '/user': {
+            '/api': {
               target: process.env.REACT_APP_API_BASE_URL,
               changeOrigin: true,
               pathRewrite: {
-                '^/user': '/user',
+                '^/api': '/api',
               },
             },
           },

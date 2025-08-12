@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-08-04 10:00:00
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-08-12 10:44:44
+ * @LastEditTime: 2025-08-12 11:24:47
  * @FilePath: \react-app\src\mock\handlers\user.ts
  * @Description: 用户管理模块 Mock 处理器
  */
@@ -87,7 +87,7 @@ export const userHandlers = [
    * 获取用户列表
    * GET /users
    */
-  http.get('/api/users', async ({ request }) => {
+  http.get('/users', async ({ request }) => {
     await delay(400); // 模拟网络延迟
 
     const url = new URL(request.url);
@@ -144,7 +144,7 @@ export const userHandlers = [
    * 获取单个用户信息
    * GET /users/:id
    */
-  http.get('/api/users/:id', async ({ params }) => {
+  http.get('/users/:id', async ({ params }) => {
     await delay(300); // 模拟网络延迟
 
     const { id } = params;
@@ -174,7 +174,7 @@ export const userHandlers = [
    * 创建用户
    * POST /users
    */
-  http.post('/api/users', async ({ request }) => {
+  http.post('/users', async ({ request }) => {
     await delay(600); // 模拟网络延迟
 
     const body = (await request.json()) as CreateUserRequest;
@@ -220,7 +220,7 @@ export const userHandlers = [
    * 更新用户信息
    * PUT /users/:id
    */
-  http.put('/api/users/:id', async ({ params, request }) => {
+  http.put('/users/:id', async ({ params, request }) => {
     await delay(400); // 模拟网络延迟
 
     const { id } = params;
@@ -283,7 +283,7 @@ export const userHandlers = [
    * 删除用户
    * DELETE /users/:id
    */
-  http.delete('/api/users/:id', async ({ params }) => {
+  http.delete('/users/:id', async ({ params }) => {
     await delay(300); // 模拟网络延迟
 
     const { id } = params;
@@ -329,7 +329,7 @@ export const userHandlers = [
    * 批量删除用户
    * DELETE /users/batch
    */
-  http.delete('/api/users/batch', async ({ request }) => {
+  http.delete('/users/batch', async ({ request }) => {
     await delay(500); // 模拟网络延迟
 
     const body = (await request.json()) as { ids: string[] };
@@ -380,7 +380,7 @@ export const userHandlers = [
    * 获取用户统计信息
    * GET /users/stats
    */
-  http.get('/api/users/stats', async () => {
+  http.get('/users/stats', async () => {
     await delay(200); // 模拟网络延迟
 
     const totalUsers = mockUsers.length;
@@ -412,7 +412,7 @@ export const userHandlers = [
    * 重置用户密码
    * POST /users/:id/reset-password
    */
-  http.post('/api/users/:id/reset-password', async ({ params }) => {
+  http.post('/users/:id/reset-password', async ({ params }) => {
     await delay(400); // 模拟网络延迟
 
     const { id } = params;
@@ -446,7 +446,7 @@ export const userHandlers = [
    * 启用/禁用用户
    * PATCH /users/:id/status
    */
-  http.patch('/api/users/:id/status', async ({ params, request }) => {
+  http.patch('/users/:id/status', async ({ params, request }) => {
     await delay(300); // 模拟网络延迟
 
     const { id } = params;

@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-08-04 10:00:00
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-08-12 10:44:08
+ * @LastEditTime: 2025-08-12 11:24:37
  * @FilePath: \react-app\src\mock\handlers\login.ts
  * @Description: 登录模块 Mock 处理器
  */
@@ -64,7 +64,7 @@ export const loginHandlers = [
    * 用户登录
    * POST /auth/login
    */
-  http.post('/api/auth/login', async ({ request }) => {
+  http.post('/auth/login', async ({ request }) => {
     await delay(500); // 模拟网络延迟
 
     const body = (await request.json()) as LoginRequest;
@@ -119,7 +119,7 @@ export const loginHandlers = [
    * 用户注册
    * POST /auth/register
    */
-  http.post('/api/auth/register', async ({ request }) => {
+  http.post('/auth/register', async ({ request }) => {
     await delay(800); // 模拟网络延迟
 
     const body = (await request.json()) as RegisterRequest;
@@ -165,7 +165,7 @@ export const loginHandlers = [
    * 用户登出
    * POST /auth/logout
    */
-  http.post('/api/auth/logout', async () => {
+  http.post('/auth/logout', async () => {
     await delay(200); // 模拟网络延迟
 
     return HttpResponse.json({
@@ -180,7 +180,7 @@ export const loginHandlers = [
    * 获取当前用户信息
    * GET /auth/me
    */
-  http.get('/api/auth/me', async ({ request }) => {
+  http.get('/auth/me', async ({ request }) => {
     await delay(300); // 模拟网络延迟
 
     const authHeader = request.headers.get('Authorization');
@@ -212,7 +212,7 @@ export const loginHandlers = [
    * 更新用户信息
    * PUT /auth/profile
    */
-  http.put('/api/auth/profile', async ({ request }) => {
+  http.put('/auth/profile', async ({ request }) => {
     await delay(400); // 模拟网络延迟
 
     const body = (await request.json()) as UpdateUserRequest;
@@ -241,7 +241,7 @@ export const loginHandlers = [
    * 上传用户头像
    * POST /auth/avatar
    */
-  http.post('/api/auth/avatar', async ({ request }) => {
+  http.post('/auth/avatar', async ({ request }) => {
     await delay(1000); // 模拟文件上传延迟
 
     const formData = await request.formData();
@@ -274,7 +274,7 @@ export const loginHandlers = [
    * 重置密码
    * POST /auth/reset-password
    */
-  http.post('/api/auth/reset-password', async ({ request }) => {
+  http.post('/auth/reset-password', async ({ request }) => {
     await delay(600); // 模拟网络延迟
 
     const body = (await request.json()) as ResetPasswordRequest;
@@ -306,7 +306,7 @@ export const loginHandlers = [
    * 修改密码
    * PUT /auth/change-password
    */
-  http.put('/api/auth/change-password', async ({ request }) => {
+  http.put('/auth/change-password', async ({ request }) => {
     await delay(400); // 模拟网络延迟
 
     const body = (await request.json()) as ChangePasswordRequest;
@@ -337,7 +337,7 @@ export const loginHandlers = [
    * 验证邮箱
    * POST /auth/verify-email
    */
-  http.post('/api/auth/verify-email', async ({ request }) => {
+  http.post('/auth/verify-email', async ({ request }) => {
     await delay(300); // 模拟网络延迟
 
     const body = (await request.json()) as VerifyEmailRequest;
@@ -368,7 +368,7 @@ export const loginHandlers = [
    * 发送验证码
    * POST /auth/send-verification-code
    */
-  http.post('/api/auth/send-verification-code', async ({ request }) => {
+  http.post('/auth/send-verification-code', async ({ request }) => {
     await delay(500); // 模拟网络延迟
 
     const body = (await request.json()) as SendVerificationCodeRequest;
@@ -400,7 +400,7 @@ export const loginHandlers = [
    * 刷新访问令牌
    * POST /auth/refresh-token
    */
-  http.post('/api/auth/refresh-token', async ({ request }) => {
+  http.post('/auth/refresh-token', async ({ request }) => {
     await delay(300); // 模拟网络延迟
 
     const body = (await request.json()) as { refreshToken: string };
@@ -441,7 +441,7 @@ export const loginHandlers = [
    * 删除用户账户
    * DELETE /auth/account
    */
-  http.delete('/api/auth/account', async () => {
+  http.delete('/auth/account', async () => {
     await delay(400); // 模拟网络延迟
 
     return HttpResponse.json({

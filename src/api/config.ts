@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-01-27 10:00:00
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-08-01 14:09:42
+ * @LastEditTime: 2025-08-12 11:27:05
  * @FilePath: \react-app\src\api\config.ts
  * @Description: Axios 配置文件
  */
@@ -23,7 +23,10 @@ export interface ApiResponse<T = any> {
 }
 
 const getBaseURL = () => {
-  return process.env.REACT_APP_API_BASE_URL;
+  if (process.env.NODE_ENV != 'development') {
+    return process.env.REACT_APP_API_BASE_URL;
+  }
+  return '';
 };
 
 // 创建 axios 实例

@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-08-04 10:00:00
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-08-12 10:45:16
+ * @LastEditTime: 2025-08-12 11:25:00
  * @FilePath: \react-app\src\mock\handlers\article.ts
  * @Description: 文章管理模块 Mock 处理器
  */
@@ -190,7 +190,7 @@ export const articleHandlers = [
    * 获取文章列表
    * GET /articles
    */
-  http.get('/api/articles', async ({ request }) => {
+  http.get('/articles', async ({ request }) => {
     await delay(400); // 模拟网络延迟
 
     const url = new URL(request.url);
@@ -260,7 +260,7 @@ export const articleHandlers = [
    * 获取单个文章详情
    * GET /articles/:id
    */
-  http.get('/api/articles/:id', async ({ params }) => {
+  http.get('/articles/:id', async ({ params }) => {
     await delay(300); // 模拟网络延迟
 
     const { id } = params;
@@ -293,7 +293,7 @@ export const articleHandlers = [
    * 创建文章
    * POST /articles
    */
-  http.post('/api/articles', async ({ request }) => {
+  http.post('/articles', async ({ request }) => {
     await delay(600); // 模拟网络延迟
 
     const body = (await request.json()) as CreateArticleRequest;
@@ -338,7 +338,7 @@ export const articleHandlers = [
    * 更新文章
    * PUT /articles/:id
    */
-  http.put('/api/articles/:id', async ({ params, request }) => {
+  http.put('/articles/:id', async ({ params, request }) => {
     await delay(400); // 模拟网络延迟
 
     const { id } = params;
@@ -391,7 +391,7 @@ export const articleHandlers = [
    * 删除文章
    * DELETE /articles/:id
    */
-  http.delete('/api/articles/:id', async ({ params }) => {
+  http.delete('/articles/:id', async ({ params }) => {
     await delay(300); // 模拟网络延迟
 
     const { id } = params;
@@ -473,7 +473,7 @@ export const articleHandlers = [
    * 获取文章分类
    * GET /articles/categories
    */
-  http.get('/api/articles/categories', async () => {
+  http.get('/articles/categories', async () => {
     await delay(200); // 模拟网络延迟
 
     return HttpResponse.json({
@@ -488,7 +488,7 @@ export const articleHandlers = [
    * 获取文章标签
    * GET /articles/tags
    */
-  http.get('/api/articles/tags', async () => {
+  http.get('/articles/tags', async () => {
     await delay(200); // 模拟网络延迟
 
     return HttpResponse.json({
@@ -503,7 +503,7 @@ export const articleHandlers = [
    * 点赞文章
    * POST /articles/:id/like
    */
-  http.post('/api/articles/:id/like', async ({ params }) => {
+  http.post('/articles/:id/like', async ({ params }) => {
     await delay(200); // 模拟网络延迟
 
     const { id } = params;
@@ -536,7 +536,7 @@ export const articleHandlers = [
    * 取消点赞文章
    * DELETE /articles/:id/like
    */
-  http.delete('/api/articles/:id/like', async ({ params }) => {
+  http.delete('/articles/:id/like', async ({ params }) => {
     await delay(200); // 模拟网络延迟
 
     const { id } = params;
@@ -569,7 +569,7 @@ export const articleHandlers = [
    * 获取文章统计信息
    * GET /articles/stats
    */
-  http.get('/api/articles/stats', async () => {
+  http.get('/articles/stats', async () => {
     await delay(200); // 模拟网络延迟
 
     const totalArticles = mockArticles.length;
@@ -619,7 +619,7 @@ export const articleHandlers = [
    * 发布文章
    * POST /articles/:id/publish
    */
-  http.post('/api/articles/:id/publish', async ({ params }) => {
+  http.post('/articles/:id/publish', async ({ params }) => {
     await delay(300); // 模拟网络延迟
 
     const { id } = params;
