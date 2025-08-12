@@ -1,452 +1,469 @@
-# API 使用指南
+# API 接口使用指南
 
-本项目使用 Axios 作为 HTTP 客户端，提供了完整的 API 调用解决方案，遵循 RESTful API 规范和模块化设计。
+本项目使用 **Axios** 作为 HTTP 客户端，提供了完整的类型安全和错误处理机制。
+
+## 🚀 核心特性
+
+- **🔒 类型安全** - 完整的 TypeScript 类型支持
+- **🔄 统一配置** - 集中化的 Axios 配置管理
+- **❌ 错误处理** - 统一的错误处理和响应拦截
+- **🔐 认证支持** - 自动的 Token 管理和刷新
+- **📡 请求拦截** - 请求和响应的统一处理
 
 ## 📁 目录结构
 
 ```
 src/api/
-├── config.ts          # Axios 基础配置
-├── index.ts           # 通用 API 方法封装（已优化类型处理）
-├── login/             # 登录模块
-│   ├── index.ts       # 登录相关 API
-│   └── type.ts        # 登录模块类型定义
-├── user/              # 用户管理模块
-│   ├── index.ts       # 用户管理 API
-│   └── type.ts        # 用户管理类型定义
-└── article/           # 文章管理模块
-    ├── index.ts       # 文章管理 API
-    └── type.ts        # 文章管理类型定义
+├── config.ts           # Axios 基础配置
+├── index.ts            # API 统一导出
+└── xxx/                # 各模块API
+    ├── index.ts        # API 实现
+    └── type.ts         # 相关类型定义
 ```
 
-## 🚀 快速开始
+## ⚙️ 基础配置
 
-### 1. 基础配置
+### Axios 实例配置
 
-在 `src/api/config.ts` 中配置了 Axios 实例：
-
-```typescript
-import { api } from '@/api';
-
-// 直接使用配置好的 axios 实例
-const response = await api.get('/users');
-```
-
-### 2. 使用通用 API 方法
+在 `src/api/config.ts` 中配置 Axios 实例：
 
 ```typescript
-import { get, post, put, del } from '@/api';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-// GET 请求
-const users = await get('/users', { page: 1, limit: 10 });
+// 创建 Axios 实例
+const api: AxiosInstance = axios.create({
+  baseURL: process.env.REACT_APP_API_BASE_URL || '',
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-// POST 请求
-const newUser = await post('/users', { name: 'John', email: 'john@example.com' });
-
-// PUT 请求
-const updatedUser = await put('/users/1', { name: 'John Updated' });
-
-// DELETE 请求
-await del('/users/1');
-```
-
-### 3. 使用模块化 API
-
-```typescript
-import { login, getCurrentUser } from '@/api/login';
-import type { LoginRequest } from '@/api/login/type';
-
-// 用户登录
-const handleLogin = async (email: string, password: string) => {
-  try {
-    const response = await login({ email, password });
-    if (response.success) {
-      console.log('登录成功:', response.data);
+// 请求拦截器
+api.interceptors.request.use(
+  (config) => {
+    // 添加认证 Token
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-  } catch (error) {
-    console.error('登录失败:', error);
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-};
-```
+);
 
-### 4. 在组件中使用
-
-```typescript
-import React, { useState } from 'react';
-import { login, getCurrentUser } from '@/api/login';
-import type { LoginRequest, User } from '@/api/login/type';
-
-const MyComponent = () => {
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  // 处理登录
-  const handleLogin = async (formData: LoginRequest) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await login(formData);
-      if (response.success) {
-        localStorage.setItem('token', response.data.token);
-        // 获取用户信息
-        await fetchUserInfo();
-      } else {
-        setError(response.message || '登录失败');
-      }
-    } catch (error) {
-      setError('登录失败，请检查网络连接');
-    } finally {
-      setLoading(false);
+// 响应拦截器
+api.interceptors.response.use(
+  (response: AxiosResponse) => {
+    return response;
+  },
+  (error) => {
+    // 统一错误处理
+    if (error.response?.status === 401) {
+      // Token 过期，跳转到登录页
+      localStorage.removeItem('token');
+      window.location.href = '/login';
     }
-  };
+    return Promise.reject(error);
+  }
+);
 
-  // 获取用户信息
-  const fetchUserInfo = async () => {
-    try {
-      const response = await getCurrentUser();
-      if (response.success) {
-        setUser(response.data);
-      }
-    } catch (error) {
-      setError('获取用户信息失败');
-    }
-  };
-
-  return (
-    <div>
-      {loading && <div>加载中...</div>}
-      {user && <div>用户: {user.name}</div>}
-      {error && <div>错误: {error}</div>}
-    </div>
-  );
-};
+export default api;
 ```
-
-## 🔧 类型处理优化
-
-### 优化背景
-
-在项目开发过程中，我们发现每个 API 模块都需要单独引入 `ApiResponse` 类型，导致代码重复和维护成本增加。
-
-### 优化方案
-
-通过在 `src/api/index.ts` 中的通用请求方法（get、post、put、del、patch、uploadFile等）直接处理 `ApiResponse` 类型，各个 API 模块完全不需要引入任何额外的类型。
-
-### 优化对比
-
-**优化前：**
-```typescript
-import { get, post, put, del } from '@/api';
-import type { ApiResponse } from '@/api';
-
-export const getUser = async (id: string): Promise<ApiResponse<User>> => {
-  return get<User>(`/users/${id}`);
-};
-```
-
-**优化后：**
-```typescript
-import { get, post, put, del } from '@/api';
-
-export const getUser = async (id: string) => {
-  return get<User>(`/users/${id}`);
-};
-```
-
-### 优化效果
-
-- ✅ **完全消除类型引入重复** - 各个模块不再需要引入 `ApiResponse` 或任何其他额外类型
-- ✅ **简化代码结构** - API函数定义更加简洁
-- ✅ **保持类型安全** - TypeScript类型推断正常工作
-- ✅ **提高可维护性** - 统一的API调用方式
-- ✅ **减少代码量** - 每个API函数减少了类型声明代码
-
-### 使用方法
-
-现在创建新的API模块时，只需要：
-
-1. **导入基础HTTP方法**：
-```typescript
-import { get, post, put, del, patch, uploadFile } from '@/api';
-```
-
-2. **直接使用这些方法**，无需任何额外的类型引入：
-```typescript
-export const myApiFunction = async (params) => {
-  return get<MyDataType>('/my-endpoint', params);
-};
-```
-
-3. **TypeScript会自动推断返回类型**为 `Promise<ApiResponse<T>>`
-
-## 🌐 请求代理配置
-
-### 代理配置说明
-
-项目使用 **CRACO** 配置请求代理，这是更现代和灵活的方式。代理配置位于 `craco.config.ts` 中。
-
-### CRACO 代理配置的优势
-
-相比传统的 `setupProxy.js` 方式，CRACO 代理配置具有以下优势：
-
-1. **TypeScript 支持** - 完整的类型检查和智能提示
-2. **统一配置** - 所有配置集中在一个文件中
-3. **更好的维护性** - 配置更清晰，易于管理
-4. **现代化** - 符合现代前端开发最佳实践
-5. **无额外依赖** - 不需要 `http-proxy-middleware` 依赖
-
-### 代理规则
-
-1. **API 代理**：`/api/*` → 后端服务器
-2. **文件上传代理**：`/upload/*` → 文件服务器
-3. **WebSocket 代理**：`/ws/*` → WebSocket 服务器
 
 ### 环境变量配置
 
-可以通过环境变量配置代理目标：
+在 `.env.development` 文件中配置 API 基础 URL：
 
 ```bash
-# API 服务器地址
-REACT_APP_API_BASE_URL=http://localhost:3001
+# 开发环境 API 配置
+REACT_APP_API_BASE_URL=http://localhost:3001/api
 
-# 文件上传服务器地址
-REACT_APP_UPLOAD_URL=http://localhost:3002
-
-# WebSocket 服务器地址
-REACT_APP_WS_URL=ws://localhost:3004
+# 启用 Mock 服务时，可以留空
+# REACT_APP_API_BASE_URL=
 ```
 
-### CRACO 配置示例
+## 📝 API 模块结构
+
+### 1. 类型定义
+
+每个 API 模块都应该有对应的类型定义文件：
 
 ```typescript
-// craco.config.ts
-const cracoConfig = {
-  webpack: {
-    configure: (webpackConfig: any, { env, paths }: any) => {
-      // 只在开发环境配置代理
-      if (env === 'development') {
-        webpackConfig.devServer = {
-          ...webpackConfig.devServer,
-          proxy: {
-            // API 代理
-            '/api': {
-              target: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001',
-              changeOrigin: true,
-              pathRewrite: {
-                '^/api': '/api',
-              },
-              // 请求拦截
-              onProxyReq: (proxyReq, req, _res) => {
-                console.log(`🔄 代理请求: ${req.method} ${req.url} -> ${proxyReq.path}`);
-              },
-            },
+// src/api/login/type.ts
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
 
-            // 文件上传代理
-            '/upload': {
-              target: process.env.REACT_APP_UPLOAD_URL || 'http://localhost:3002',
-              changeOrigin: true,
-              timeout: 30000,
-            },
+export interface LoginResponse {
+  user: User;
+  token: string;
+  refreshToken: string;
+  expiresIn: number;
+}
 
-            // WebSocket 代理
-            '/ws': {
-              target: process.env.REACT_APP_WS_URL || 'ws://localhost:3004',
-              changeOrigin: true,
-              ws: true,
-            },
-          },
-        };
-      }
-      return webpackConfig;
-    },
-  },
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  role: 'user' | 'admin' | 'moderator';
+  status: 'active' | 'inactive';
+  createdAt: string;
+  updatedAt: string;
+}
+```
+
+### 2. API 实现
+
+API 实现文件包含具体的接口调用逻辑：
+
+```typescript
+// src/api/login/index.ts
+import api from '../config';
+import type { LoginRequest, LoginResponse } from './type';
+
+export const login = async (data: LoginRequest): Promise<LoginResponse> => {
+  const response = await api.post<LoginResponse>('/auth/login', data);
+  return response.data;
+};
+
+export const register = async (data: RegisterRequest): Promise<RegisterResponse> => {
+  const response = await api.post<RegisterResponse>('/auth/register', data);
+  return response.data;
+};
+
+export const logout = async (): Promise<void> => {
+  await api.post('/auth/logout');
+  localStorage.removeItem('token');
 };
 ```
 
-### 使用示例
+## 🔧 使用示例
+
+### 基本使用
 
 ```typescript
-// 这些请求会自动被代理到对应的服务器
-import { get, post } from '@/api';
+import { login, getUsers } from '@/api';
 
-// API 请求 - 会被代理到 http://localhost:3001/api/users
-const users = await get('/users');
+// 登录
+const handleLogin = async () => {
+  try {
+    const response = await login({
+      email: 'user@example.com',
+      password: '123456',
+    });
 
-// 文件上传 - 会被代理到 http://localhost:3002/upload/file
-const formData = new FormData();
-formData.append('file', file);
-await fetch('/upload/file', {
-  method: 'POST',
-  body: formData
-});
+    // 保存 token
+    localStorage.setItem('token', response.token);
 
-// WebSocket 连接 - 会被代理到 ws://localhost:3004/ws/chat
-const ws = new WebSocket('/ws/chat');
+    // 跳转到首页
+    navigate('/');
+  } catch (error) {
+    console.error('登录失败:', error);
+  }
+};
+
+// 获取用户列表
+const handleGetUsers = async () => {
+  try {
+    const response = await getUsers({ page: 1, limit: 10 });
+    setUsers(response.data.users);
+  } catch (error) {
+    console.error('获取用户列表失败:', error);
+  }
+};
 ```
 
-### 开发环境配置
-
-在开发环境中，API 配置会自动使用相对路径：
+### 带参数和查询的 API
 
 ```typescript
-// 开发环境：baseURL = '/api'
-// 生产环境：baseURL = 'http://localhost:3001/api'
+// 获取用户列表（带分页和搜索）
+const getUsers = async (params: UserListParams): Promise<UserListResponse> => {
+  const response = await api.get<UserListResponse>('/users', { params });
+  return response.data;
+};
+
+// 更新用户信息
+const updateUser = async (id: string, data: UpdateUserRequest): Promise<User> => {
+  const response = await api.put<User>(`/users/${id}`, data);
+  return response.data;
+};
+
+// 删除用户
+const deleteUser = async (id: string): Promise<void> => {
+  await api.delete(`/users/${id}`);
+};
 ```
 
-这样确保了开发和生产环境的一致性。
+## 🎨 响应处理
 
-## 📋 模块化 API
+### 统一响应格式
 
-项目按功能模块组织 API，每个模块包含：
+```typescript
+// 统一的 API 响应格式
+interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+  code?: number;
+}
 
-- **登录模块** (`/api/login`): 用户认证、登录、注册等
-- **用户管理模块** (`/api/user`): 用户 CRUD 操作、权限管理等
-- **文章管理模块** (`/api/article`): 文章 CRUD 操作、分类管理等
-
-每个模块都提供完整的 TypeScript 类型支持和错误处理。
-
-## 🔧 配置说明
-
-### 基础配置
-
-在 `src/api/config.ts` 中配置了：
-
-- **基础 URL**: 根据环境变量设置
-- **超时时间**: 15 秒
-- **请求头**: 自动设置 Content-Type
-- **凭证**: 支持跨域请求携带凭证
-
-### 请求拦截器
-
-- 自动添加认证 token
-- 开发环境下打印请求日志
-- 请求参数预处理
-
-### 响应拦截器
-
-- 统一错误处理
-- 开发环境下打印响应日志
-- 自动处理常见 HTTP 状态码
+// 使用示例
+const response = await api.get<ApiResponse<User[]>>('/users');
+if (response.data.success) {
+  setUsers(response.data.data);
+} else {
+  message.error(response.data.message);
+}
+```
 
 ### 错误处理
 
-- **401**: 未授权，清除 token 并提示重新登录
-- **403**: 权限不足
-- **404**: 资源不存在
-- **500**: 服务器内部错误
-- **网络错误**: 连接失败提示
-
-## 📝 最佳实践
-
-### 1. 模块化设计
-
-- 按功能模块组织 API
-- 每个模块包含 `index.ts`（API 方法）和 `type.ts`（类型定义）
-- 遵循 RESTful API 规范
-
-### 2. 类型安全
-
-```typescript
-import type { LoginRequest, User } from '@/api/login/type';
-
-const handleLogin = async (data: LoginRequest): Promise<User | null> => {
-  try {
-    const response = await login(data);
-    return response.success ? response.data.user : null;
-  } catch (error) {
-    console.error('登录失败:', error);
-    return null;
-  }
-};
-```
-
-### 3. 错误处理
-
 ```typescript
 try {
-  const response = await get('/users');
+  const response = await login(credentials);
   // 处理成功响应
 } catch (error) {
-  // 错误已经被拦截器处理，这里可以做额外处理
-  console.error('API 调用失败:', error);
-}
-```
-
-### 4. 加载状态
-
-```typescript
-const [loading, setLoading] = useState(false);
-
-const handleSubmit = async () => {
-  setLoading(true);
-  try {
-    await post('/submit', data);
-  } finally {
-    setLoading(false);
+  if (axios.isAxiosError(error)) {
+    // Axios 错误
+    if (error.response) {
+      // 服务器响应错误
+      const { status, data } = error.response;
+      switch (status) {
+        case 400:
+          message.error(data.message || '请求参数错误');
+          break;
+        case 401:
+          message.error('未授权，请重新登录');
+          break;
+        case 403:
+          message.error('权限不足');
+          break;
+        case 404:
+          message.error('请求的资源不存在');
+          break;
+        case 500:
+          message.error('服务器内部错误');
+          break;
+        default:
+          message.error('请求失败');
+      }
+    } else if (error.request) {
+      // 网络错误
+      message.error('网络连接失败，请检查网络设置');
+    } else {
+      // 其他错误
+      message.error('请求配置错误');
+    }
+  } else {
+    // 非 Axios 错误
+    message.error('未知错误');
   }
-};
-```
-
-### 5. 环境变量
-
-在 `.env` 文件中设置 API 基础 URL：
-
-```env
-REACT_APP_API_BASE_URL=http://localhost:3001/api
-```
-
-### 6. 创建新的API模块
-
-按照以下步骤创建新的API模块：
-
-1. **创建模块目录**：
-```
-src/api/your-module/
-├── index.ts       # API 方法
-└── type.ts        # 类型定义
-```
-
-2. **定义类型**（在 `type.ts` 中）：
-```typescript
-export interface YourDataType {
-  id: string;
-  name: string;
-  // ... 其他字段
-}
-
-export interface CreateYourDataRequest {
-  name: string;
-  // ... 其他字段
 }
 ```
 
-3. **实现API方法**（在 `index.ts` 中）：
+## 🔐 认证和授权
+
+### Token 管理
+
 ```typescript
-import { get, post, put, del } from '@/api';
-import type { YourDataType, CreateYourDataRequest } from './type';
+// 自动添加 Token 到请求头
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-export const getYourData = async (id: string) => {
-  return get<YourDataType>(`/your-endpoint/${id}`);
-};
-
-export const createYourData = async (data: CreateYourDataRequest) => {
-  return post<YourDataType>('/your-endpoint', data);
-};
+// Token 过期处理
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token 过期，清除本地存储并跳转登录页
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
 ```
 
-## 🎯 示例组件
+### 刷新 Token
 
-项目提供了一个完整的示例组件：
+```typescript
+// Token 刷新逻辑
+let isRefreshing = false;
+let failedQueue: Array<{
+  resolve: (value: any) => void;
+  reject: (error: any) => void;
+}> = [];
 
-1. **ApiDemo**: 模块化 API 使用示例，展示了登录、用户信息获取、用户列表和文章列表等功能
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve(token);
+    }
+  });
 
-这个组件展示了如何在实际项目中使用 API 功能。
+  failedQueue = [];
+};
 
-## 📚 相关文档
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-- [Axios 官方文档](https://axios-http.com/)
-- [TypeScript 文档](https://www.typescriptlang.org/docs/)
-- [RESTful API 设计指南](https://restfulapi.net/)
-- [CRACO 官方文档](https://github.com/dilanx/craco)
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        }).then((token) => {
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+          return api(originalRequest);
+        }).catch((err) => {
+          return Promise.reject(err);
+        });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        const refreshToken = localStorage.getItem('refreshToken');
+        const response = await api.post('/auth/refresh', { refreshToken });
+        const { token } = response.data;
+
+        localStorage.setItem('token', token);
+        api.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+        processQueue(null, token);
+        return api(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError, null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+```
+
+## 📊 请求和响应监控
+
+### 请求日志
+
+```typescript
+// 请求日志记录
+api.interceptors.request.use((config) => {
+  console.log('🚀 API Request:', {
+    method: config.method?.toUpperCase(),
+    url: config.url,
+    data: config.data,
+    params: config.params,
+  });
+  return config;
+});
+
+// 响应日志记录
+api.interceptors.response.use(
+  (response) => {
+    console.log('✅ API Response:', {
+      status: response.status,
+      url: response.config.url,
+      data: response.data,
+    });
+    return response;
+  },
+  (error) => {
+    console.error('❌ API Error:', {
+      status: error.response?.status,
+      url: error.config?.url,
+      message: error.message,
+      data: error.response?.data,
+    });
+    return Promise.reject(error);
+  }
+);
+```
+
+## 🧪 测试支持
+
+### Mock 数据集成
+
+当启用 Mock 服务时，API 调用会被 MSW 拦截：
+
+```typescript
+// 在开发环境中，这些 API 调用会被 Mock 服务拦截
+const users = await getUsers({ page: 1, limit: 10 });
+
+// 在生产环境中，这些 API 调用会发送到真实的服务器
+```
+
+### 测试环境配置
+
+```typescript
+// 测试环境配置
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api',
+  timeout: process.env.NODE_ENV === 'test' ? 5000 : 10000,
+});
+```
+
+## 📚 最佳实践
+
+### 1. 类型安全
+
+- 为所有 API 请求和响应定义 TypeScript 接口
+- 使用泛型确保类型安全
+- 避免使用 `any` 类型
+
+### 2. 错误处理
+
+- 实现统一的错误处理机制
+- 为用户提供友好的错误提示
+- 记录详细的错误日志
+
+### 3. 性能优化
+
+- 合理设置请求超时时间
+- 实现请求去重和缓存
+- 使用请求取消机制
+
+### 4. 安全性
+
+- 验证和清理用户输入
+- 使用 HTTPS 传输敏感数据
+- 实现适当的认证和授权
+
+## 🆘 常见问题
+
+### Q: 如何处理跨域问题？
+A: 在开发环境中，可以通过代理配置解决跨域问题。在生产环境中，需要后端支持 CORS。
+
+### Q: 如何实现请求重试？
+A: 可以使用 Axios 的拦截器实现请求重试逻辑，或者使用第三方库如 `axios-retry`。
+
+### Q: 如何取消正在进行的请求？
+A: 使用 Axios 的 `CancelToken` 或 `AbortController` 来取消请求。
+
+### Q: 如何实现请求队列？
+A: 可以使用 Axios 拦截器实现请求队列，确保请求按顺序执行。
+
+---
+
+**Happy API Development! 🚀**

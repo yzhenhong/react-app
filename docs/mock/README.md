@@ -4,12 +4,12 @@
 
 ## 🎯 为什么选择 MSW？
 
-### 优势
-- **真实的网络请求** - 使用 Service Worker 拦截真实的 HTTP 请求
-- **零配置** - 无需修改现有代码，直接拦截 API 调用
-- **类型安全** - 完整的 TypeScript 支持
-- **开发友好** - 支持热重载，开发体验优秀
-- **生产就绪** - 可以用于测试环境
+### 核心优势
+- **🌐 网络级拦截** - 使用 Service Worker 拦截真实的 HTTP 请求
+- **⚡ 零配置** - 无需修改现有代码，直接拦截 API 调用
+- **🔒 类型安全** - 完整的 TypeScript 支持
+- **🔥 热重载** - 支持实时修改，开发体验优秀
+- **🚀 生产就绪** - 可以用于测试环境
 
 ### 与其他 Mock 方案的对比
 
@@ -35,16 +35,12 @@ src/mock/
 
 ## 🚀 快速开始
 
-### 1. 环境配置
+### 1. 启用 Mock 服务
 
-创建 `.env.development` 文件（参考 `env.example`）：
+在 `.env.development` 文件中设置：
 
 ```bash
-# 启用 Mock 服务
 REACT_APP_ENABLE_MOCK=true
-
-# API 基础 URL（开发环境留空以使用 Mock）
-REACT_APP_API_BASE_URL=
 ```
 
 ### 2. 启动开发服务器
@@ -53,19 +49,59 @@ REACT_APP_API_BASE_URL=
 npm start
 ```
 
-Mock 服务会自动启动，你会在控制台看到：
+### 3. 访问演示页面
 
-```
-🎭 Mock 服务已启动
-```
+打开浏览器访问：`http://localhost:3000/mock-demo`
 
-### 3. 测试 Mock 数据
+## 📋 可用的 Mock API
 
-项目提供了一个完整的 Mock 演示组件，你可以：
+### 🔐 登录模块
+- `POST /auth/login` - 用户登录
+- `POST /auth/register` - 用户注册
+- `POST /auth/logout` - 用户登出
+- `GET /auth/me` - 获取当前用户信息
+- `PUT /auth/profile` - 更新用户信息
+- `POST /auth/avatar` - 上传用户头像
 
-1. 访问 Mock 演示页面
-2. 测试各种 API 接口
-3. 查看 Mock 数据的响应
+### 👥 用户管理模块
+- `GET /users` - 获取用户列表（支持分页、搜索、过滤）
+- `GET /users/:id` - 获取单个用户信息
+- `POST /users` - 创建用户
+- `PUT /users/:id` - 更新用户信息
+- `DELETE /users/:id` - 删除用户
+- `DELETE /users/batch` - 批量删除用户
+- `GET /users/stats` - 获取用户统计信息
+
+### 📝 文章管理模块
+- `GET /articles` - 获取文章列表（支持分页、搜索、过滤）
+- `GET /articles/:id` - 获取单个文章详情
+- `POST /articles` - 创建文章
+- `PUT /articles/:id` - 更新文章
+- `DELETE /articles/:id` - 删除文章
+- `DELETE /articles/batch` - 批量删除文章
+- `GET /articles/categories` - 获取文章分类
+- `GET /articles/tags` - 获取文章标签
+- `POST /articles/:id/like` - 点赞文章
+- `DELETE /articles/:id/like` - 取消点赞文章
+- `GET /articles/stats` - 获取文章统计信息
+
+## 🎨 特性说明
+
+### 网络延迟模拟
+- **查询操作**: 200-400ms
+- **创建/更新操作**: 400-600ms
+- **删除操作**: 300-500ms
+- **文件上传**: 1000ms
+
+### 错误处理
+- 支持各种 HTTP 状态码
+- 模拟网络错误
+- 模拟业务逻辑错误
+
+### 数据验证
+- 邮箱格式验证
+- 必填字段验证
+- 数据唯一性检查
 
 ## 🔧 配置说明
 
@@ -89,9 +125,7 @@ export const startMock = async () => {
   if (shouldEnableMock) {
     await worker.start({
       onUnhandledRequest: 'bypass', // 未处理的请求直接通过
-      serviceWorker: {
-        url: '/mockServiceWorker.js',
-      },
+      quiet: false, // 显示详细日志
     });
   }
 };
@@ -99,430 +133,91 @@ export const startMock = async () => {
 
 ### 环境变量控制
 
-- `REACT_APP_ENABLE_MOCK=true` - 启用 Mock 服务
-- `REACT_APP_ENABLE_MOCK=false` - 禁用 Mock 服务
+| 变量名 | 说明 | 可选值 |
+|--------|------|--------|
+| `REACT_APP_ENABLE_MOCK` | 是否启用 Mock 服务 | `true` / `false` |
+| `NODE_ENV` | 运行环境 | `development` / `production` |
 
-## 📝 创建 Mock 处理器
+## 🛠️ 自定义 Mock 数据
 
-### 1. 创建处理器文件
+### 1. 修改现有数据
 
-在 `src/mock/handlers/` 目录下创建新的处理器文件：
+编辑对应的 Mock 处理器文件：
+- `src/mock/handlers/login.ts` - 登录相关数据
+- `src/mock/handlers/user.ts` - 用户管理数据
+- `src/mock/handlers/article.ts` - 文章管理数据
+
+### 2. 添加新的 Mock 处理器
+
+1. 在 `src/mock/handlers/` 目录下创建新的处理器文件
+2. 在 `src/mock/handlers/index.ts` 中注册新的处理器
+3. 重启开发服务器
+
+### 3. 处理器示例
 
 ```typescript
-// src/mock/handlers/example.ts
 import { http, HttpResponse, delay } from 'msw';
 
-// Mock 数据
-const mockData = [
-  { id: '1', name: '示例数据1' },
-  { id: '2', name: '示例数据2' },
-];
-
-// 处理器
-export const exampleHandlers = [
-  // GET 请求
-  http.get('/api/example', async () => {
+export const userHandlers = [
+  // 获取用户列表
+  http.get('/users', async ({ request }) => {
     await delay(300); // 模拟网络延迟
 
-    return HttpResponse.json({
-      code: 200,
-      message: '获取数据成功',
-      data: mockData,
-      success: true,
-    });
-  }),
-
-  // POST 请求
-  http.post('/api/example', async ({ request }) => {
-    await delay(500);
-
-    const body = await request.json();
+    const url = new URL(request.url);
+    const page = parseInt(url.searchParams.get('page') || '1');
+    const limit = parseInt(url.searchParams.get('limit') || '10');
 
     return HttpResponse.json({
-      code: 201,
-      message: '创建成功',
-      data: { id: '3', ...body },
       success: true,
-    });
-  }),
-];
-```
-
-### 2. 注册处理器
-
-在 `src/mock/handlers/index.ts` 中注册新的处理器：
-
-```typescript
-import { loginHandlers } from './login';
-import { userHandlers } from './user';
-import { articleHandlers } from './article';
-import { exampleHandlers } from './example'; // 新增
-
-export const handlers = [
-  ...loginHandlers,
-  ...userHandlers,
-  ...articleHandlers,
-  ...exampleHandlers, // 新增
-];
-```
-
-## 🎨 Mock 数据最佳实践
-
-### 1. 数据结构一致性
-
-确保 Mock 数据与真实 API 响应结构一致：
-
-```typescript
-// 统一的响应格式
-interface ApiResponse<T> {
-  code: number;
-  message: string;
-  data: T;
-  success: boolean;
-}
-
-// Mock 处理器
-http.get('/api/users', async () => {
-  return HttpResponse.json({
-    code: 200,
-    message: '获取用户列表成功',
-    data: mockUsers,
-    success: true,
-  });
-});
-```
-
-### 2. 错误处理
-
-模拟各种错误情况：
-
-```typescript
-http.get('/api/users/:id', async ({ params }) => {
-  const { id } = params;
-  const user = mockUsers.find(u => u.id === id);
-
-  if (!user) {
-    return HttpResponse.json(
-      {
-        code: 404,
-        message: '用户不存在',
-        data: null,
-        success: false,
-      },
-      { status: 404 }
-    );
-  }
-
-  return HttpResponse.json({
-    code: 200,
-    message: '获取用户成功',
-    data: user,
-    success: true,
-  });
-});
-```
-
-### 3. 网络延迟模拟
-
-使用 `delay` 函数模拟真实的网络延迟：
-
-```typescript
-http.post('/api/users', async () => {
-  await delay(600); // 模拟 600ms 延迟
-
-  return HttpResponse.json({
-    code: 201,
-    message: '创建用户成功',
-    data: newUser,
-    success: true,
-  });
-});
-```
-
-### 4. 动态数据处理
-
-支持查询参数和请求体处理：
-
-```typescript
-http.get('/api/users', async ({ request }) => {
-  const url = new URL(request.url);
-  const page = parseInt(url.searchParams.get('page') || '1');
-  const limit = parseInt(url.searchParams.get('limit') || '10');
-  const search = url.searchParams.get('search') || '';
-
-  // 过滤和分页处理
-  let filteredUsers = [...mockUsers];
-
-  if (search) {
-    filteredUsers = filteredUsers.filter(user =>
-      user.name.toLowerCase().includes(search.toLowerCase())
-    );
-  }
-
-  const startIndex = (page - 1) * limit;
-  const endIndex = startIndex + limit;
-  const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
-
-  return HttpResponse.json({
-    code: 200,
-    message: '获取用户列表成功',
-    data: {
-      users: paginatedUsers,
-      pagination: {
+      message: '获取用户列表成功',
+      data: {
+        users: mockUsers.slice((page - 1) * limit, page * limit),
+        total: mockUsers.length,
         page,
         limit,
-        total: filteredUsers.length,
-        totalPages: Math.ceil(filteredUsers.length / limit),
       },
-    },
-    success: true,
-  });
-});
-```
-
-## 🔍 调试和监控
-
-### 1. 控制台日志
-
-Mock 服务会在控制台输出详细的请求信息：
-
-```
-🚀 API Request: {
-  method: "POST",
-  url: "/auth/login",
-  data: { email: "zhangsan@example.com", password: "123456" }
-}
-
-✅ API Response: {
-  status: 200,
-  url: "/auth/login",
-  data: { code: 200, message: "登录成功", ... }
-}
-```
-
-### 2. 网络面板
-
-在浏览器开发者工具的网络面板中，你可以看到：
-
-- 被拦截的请求（标记为 Mock）
-- 请求和响应的详细信息
-- 网络延迟模拟
-
-### 3. 调试技巧
-
-```typescript
-// 在处理器中添加调试信息
-http.get('/api/users', async ({ request }) => {
-  console.log('🎭 Mock 处理器被调用:', request.url);
-
-  // 你的处理逻辑...
-
-  console.log('🎭 Mock 响应数据:', responseData);
-  return HttpResponse.json(responseData);
-});
-```
-
-## 🧪 测试场景
-
-### 1. 正常流程测试
-
-```typescript
-// 测试登录成功
-const response = await login({ email: 'zhangsan@example.com', password: '123456' });
-expect(response.success).toBe(true);
-expect(response.data.user.name).toBe('张三');
-```
-
-### 2. 错误场景测试
-
-```typescript
-// 测试登录失败
-const response = await login({ email: 'wrong@example.com', password: 'wrong' });
-expect(response.success).toBe(false);
-expect(response.message).toBe('用户不存在');
-```
-
-### 3. 网络异常测试
-
-```typescript
-// 测试网络延迟
-const startTime = Date.now();
-await getUsers();
-const endTime = Date.now();
-expect(endTime - startTime).toBeGreaterThan(300); // 延迟应该大于 300ms
-```
-
-## 🔄 与真实 API 切换
-
-### 1. 开发环境
-
-```bash
-# 启用 Mock
-REACT_APP_ENABLE_MOCK=true
-REACT_APP_API_BASE_URL=
-
-# 禁用 Mock，使用真实 API
-REACT_APP_ENABLE_MOCK=false
-REACT_APP_API_BASE_URL=http://localhost:3001/api
-```
-
-### 2. 生产环境
-
-Mock 服务只在开发环境启用，生产环境会自动禁用：
-
-```typescript
-const shouldEnableMock =
-  process.env.NODE_ENV === 'development' &&
-  process.env.REACT_APP_ENABLE_MOCK === 'true';
-```
-
-## 📊 性能优化
-
-### 1. 延迟优化
-
-根据不同的操作类型设置合适的延迟：
-
-```typescript
-// 查询操作 - 快速响应
-http.get('/api/users', async () => {
-  await delay(200);
-  // ...
-});
-
-// 创建操作 - 中等延迟
-http.post('/api/users', async () => {
-  await delay(500);
-  // ...
-});
-
-// 文件上传 - 较长延迟
-http.post('/api/upload', async () => {
-  await delay(1000);
-  // ...
-});
-```
-
-### 2. 数据缓存
-
-对于不经常变化的数据，可以实现简单的缓存机制：
-
-```typescript
-let cachedUsers: User[] | null = null;
-let cacheTime = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5分钟
-
-http.get('/api/users', async () => {
-  const now = Date.now();
-
-  if (cachedUsers && (now - cacheTime) < CACHE_DURATION) {
-    return HttpResponse.json({
-      code: 200,
-      message: '获取用户列表成功（缓存）',
-      data: cachedUsers,
-      success: true,
     });
-  }
-
-  // 更新缓存
-  cachedUsers = mockUsers;
-  cacheTime = now;
-
-  return HttpResponse.json({
-    code: 200,
-    message: '获取用户列表成功',
-    data: cachedUsers,
-    success: true,
-  });
-});
+  }),
+];
 ```
 
-## 🎯 常见问题
+## 🔍 调试技巧
 
-### Q: Mock 服务没有启动怎么办？
+### 1. 查看控制台日志
+Mock 服务会在控制台输出详细的请求和响应信息。
 
-A: 检查以下几点：
-1. 确认 `.env.development` 文件中设置了 `REACT_APP_ENABLE_MOCK=true`
-2. 确认在开发环境运行（`NODE_ENV=development`）
-3. 检查浏览器控制台是否有错误信息
-4. 确认 `public/mockServiceWorker.js` 文件存在
+### 2. 使用浏览器开发者工具
+在 Network 面板中查看被拦截的请求。
 
-### Q: 如何调试 Mock 处理器？
+### 3. 临时禁用 Mock
+设置 `REACT_APP_ENABLE_MOCK=false` 来禁用 Mock 服务。
 
-A: 可以添加以下调试代码：
+## 🎯 测试账号
 
-```typescript
-http.get('/api/users', async ({ request }) => {
-  console.log('🎭 请求信息:', {
-    url: request.url,
-    method: request.method,
-    headers: Object.fromEntries(request.headers.entries()),
-  });
+### 登录测试
+- **邮箱**: `zhangsan@example.com`
+- **密码**: `123456`
 
-  // 你的处理逻辑...
-});
-```
+### 其他测试账号
+- **邮箱**: `lisi@example.com`
+- **密码**: `123456`
 
-### Q: 如何模拟网络错误？
-
-A: 可以抛出异常或返回错误响应：
-
-```typescript
-http.get('/api/users', async () => {
-  // 模拟网络错误
-  throw new Error('网络连接失败');
-
-  // 或者返回错误响应
-  return HttpResponse.json(
-    {
-      code: 500,
-      message: '服务器内部错误',
-      data: null,
-      success: false,
-    },
-    { status: 500 }
-  );
-});
-```
-
-### Q: 如何模拟文件上传？
-
-A: 使用 FormData 处理：
-
-```typescript
-http.post('/api/upload', async ({ request }) => {
-  const formData = await request.formData();
-  const file = formData.get('file') as File;
-
-  if (!file) {
-    return HttpResponse.json(
-      {
-        code: 400,
-        message: '请选择文件',
-        data: null,
-        success: false,
-      },
-      { status: 400 }
-    );
-  }
-
-  return HttpResponse.json({
-    code: 200,
-    message: '上传成功',
-    data: {
-      url: `https://example.com/uploads/${file.name}`,
-      size: file.size,
-    },
-    success: true,
-  });
-});
-```
-
-## 📚 相关资源
+## 📚 更多资源
 
 - [MSW 官方文档](https://mswjs.io/)
 - [MSW GitHub](https://github.com/mswjs/msw)
-- [Service Worker 文档](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
-- [Mock 数据最佳实践](https://mswjs.io/docs/best-practices)
+- [项目 Mock 演示页面](../mock-demo)
+
+## 🆘 常见问题
+
+### Q: Mock 服务没有启动怎么办？
+A: 检查环境变量 `REACT_APP_ENABLE_MOCK` 是否设置为 `true`，并确保在开发环境下运行。
+
+### Q: 如何添加新的 API 端点？
+A: 在对应的处理器文件中添加新的 `http` 处理器，并在 `handlers/index.ts` 中注册。
+
+### Q: Mock 数据如何与真实 API 切换？
+A: 通过环境变量 `REACT_APP_ENABLE_MOCK` 控制，设置为 `false` 时使用真实 API。
 
 ---
 

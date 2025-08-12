@@ -28,9 +28,9 @@
 
 ```
 react-app/
-├── public/                 # 静态资源目录
-├── src/                    # 源代码目录
-│   ├── components/         # React 组件
+├── public/                # 静态资源目录
+├── src/                   # 源代码目录
+│   ├── components/        # React 组件
 │   ├── pages/             # 页面组件
 │   ├── api/               # API 接口（已优化类型处理）
 │   ├── mock/              # Mock 数据服务
