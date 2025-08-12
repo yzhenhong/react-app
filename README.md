@@ -15,6 +15,14 @@
 - 🌐 **i18n** - 国际化支持
 - 📡 **Axios** - HTTP 客户端（已优化API响应类型处理）
 - 🗃️ **Redux Toolkit** - 状态管理
+- 🎭 **MSW Mock** - 强大的 Mock 数据服务（支持开发环境数据模拟）
+
+### Mock 功能特性
+- **网络级拦截**: 使用 MSW (Mock Service Worker) 在浏览器网络层拦截真实 HTTP 请求
+- **真实 API 体验**: 完全模拟真实的后端 API 响应，包括状态码、延迟、错误处理
+- **开发友好**: 支持热重载，修改 Mock 数据后立即生效
+- **环境控制**: 通过环境变量 `REACT_APP_ENABLE_MOCK` 控制启用/禁用
+- **完整覆盖**: 涵盖登录、用户管理、文章管理等核心功能模块
 
 ## 📋 目录结构
 
@@ -25,6 +33,9 @@ react-app/
 │   ├── components/         # React 组件
 │   ├── pages/             # 页面组件
 │   ├── api/               # API 接口（已优化类型处理）
+│   ├── mock/              # Mock 数据服务
+│   │   ├── handlers/      # Mock 处理器
+│   │   └── index.ts       # Mock 服务入口
 │   ├── i18n/              # 国际化配置
 │   ├── utils/             # 工具函数
 │   ├── assets/            # 资源文件
@@ -36,6 +47,7 @@ react-app/
 ├── .prettierrc            # Prettier 配置
 ├── craco.config.ts        # CRACO 配置
 ├── tsconfig.json          # TypeScript 配置
+├── env.example            # 环境变量示例
 └── package.json           # 项目依赖
 ```
 
@@ -128,6 +140,7 @@ npm run code:fix          # 同时运行 ESLint 自动修复和 Prettier 格式�
 更多详细的使用指南和配置说明，请查看 `docs/` 目录下的相关文档：
 
 - [API 使用指南](docs/api/README.md) - Axios HTTP 客户端配置和使用（包含类型处理优化说明）
+- [Mock 数据使用指南](docs/mock/README.md) - MSW Mock 数据服务配置和使用
 - [国际化配置](docs/i18n/README.md) - 多语言支持和配置
 - [路由系统](docs/router/README.md) - React Router 路由管理
 - [代码规范](docs/coding-standards.md) - 代码编写规范和最佳实践
@@ -152,6 +165,12 @@ A: 项目已内置 `lazyLoad` 工具函数，可以直接使用 `element: lazyLo
 
 ### Q: 如何创建新的 API 模块？
 A: 详细说明请参考 [API 使用指南](docs/api/README.md)，其中包含了完整的类型处理优化说明和使用方法。
+
+### Q: 如何使用 Mock 数据进行开发？
+A: 详细说明请参考 [Mock 数据使用指南](docs/mock/README.md)，其中包含了完整的 Mock 服务配置和使用方法。
+
+### Q: 如何启用或禁用 Mock 服务？
+A: 在 `.env.development` 文件中设置 `REACT_APP_ENABLE_MOCK=true` 启用 Mock 服务，设置为 `false` 禁用 Mock 服务。
 
 ## 📦 构建和部署
 

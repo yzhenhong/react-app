@@ -15,8 +15,8 @@ export interface User {
   name: string;
   email: string;
   avatar?: string;
-  role: 'user' | 'admin';
-  status: 'active' | 'inactive' | 'banned';
+  role: 'user' | 'admin' | 'moderator';
+  status: 'active' | 'inactive';
   createdAt: string;
   updatedAt: string;
 }
@@ -28,8 +28,8 @@ export interface UserListParams {
   page?: number;
   limit?: number;
   search?: string;
-  role?: 'user' | 'admin';
-  status?: 'active' | 'inactive' | 'banned';
+  role?: 'user' | 'admin' | 'moderator';
+  status?: 'active' | 'inactive';
   sortBy?: 'name' | 'email' | 'createdAt' | 'updatedAt';
   sortOrder?: 'asc' | 'desc';
 }
@@ -52,7 +52,7 @@ export interface CreateUserRequest {
   name: string;
   email: string;
   password: string;
-  role?: 'user' | 'admin';
+  role?: 'user' | 'admin' | 'moderator';
 }
 
 /**
@@ -61,8 +61,8 @@ export interface CreateUserRequest {
 export interface UpdateUserRequest {
   name?: string;
   email?: string;
-  role?: 'user' | 'admin';
-  status?: 'active' | 'inactive' | 'banned';
+  role?: 'user' | 'admin' | 'moderator';
+  status?: 'active' | 'inactive';
 }
 
 /**
@@ -72,7 +72,5 @@ export interface UserStats {
   total: number;
   active: number;
   inactive: number;
-  banned: number;
-  admins: number;
-  users: number;
+  roleStats: Record<string, number>;
 }

@@ -23,14 +23,21 @@ import '@/assets/styles/index.less';
 import '@/i18n'; // 导入 i18n 配置
 import App from '@/App';
 
+// 导入 Mock 服务
+import { startMock } from '@/mock';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+
+// 启动 Mock 服务（仅在开发环境且启用 Mock 时）
+startMock().then(() => {
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+});
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

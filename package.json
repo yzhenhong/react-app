@@ -65,6 +65,12 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "less": "^4.4.0",
     "less-loader": "^12.3.0",
+    "msw": "^2.10.4",
     "prettier": "^3.6.2"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

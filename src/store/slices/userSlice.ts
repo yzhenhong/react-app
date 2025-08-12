@@ -7,7 +7,7 @@ interface UserState {
   email: string;
   isLoggedIn: boolean;
   avatar: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'moderator';
 }
 
 // 初始状态

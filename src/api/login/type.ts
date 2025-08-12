@@ -15,7 +15,8 @@ export interface User {
   name: string;
   email: string;
   avatar?: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'moderator';
+  status: 'active' | 'inactive';
   createdAt: string;
   updatedAt: string;
 }
@@ -35,6 +36,7 @@ export interface LoginResponse {
   user: User;
   token: string;
   refreshToken: string;
+  expiresIn: number;
 }
 
 /**

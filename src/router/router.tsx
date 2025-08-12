@@ -119,6 +119,15 @@ export const routes: RouteConfig[] = [
           layout: 'default',
         },
       },
+      {
+        path: '/mock-demo',
+        name: 'MockDemo',
+        element: lazyLoad(() => import('@/pages/mock-demo')),
+        meta: {
+          title: 'Mock 数据演示',
+          layout: 'default',
+        },
+      },
     ],
   },
   {

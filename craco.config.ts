@@ -73,6 +73,20 @@ const cracoConfig = {
       },
     },
   ],
+
+  // Babel 配置
+  babel: {
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          targets: {
+            node: 'current',
+          },
+        },
+      ],
+    ],
+  },
 };
 
 export default cracoConfig;
