@@ -1,53 +1,5 @@
-// 导入通用样式（包含变量）
-@import '@/assets/styles/common.less';
-
-.news-page {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: @padding-lg;
-
-  .news-title {
-    color: @primary-color;
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: @margin-lg;
-    text-align: center;
-  }
-
-  .news-content {
-    background: @background-color-light;
-    border-radius: @border-radius-base;
-    padding: @padding-lg;
-    box-shadow: @box-shadow-base;
-
-    p {
-      color: @text-color;
-      font-size: @font-size-base;
-      line-height: 1.6;
-      margin-bottom: @margin-md;
-    }
-
-    .news-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-
-      li {
-        color: @text-color;
-        font-size: @font-size-base;
-        padding: @padding-sm 0;
-        border-bottom: 1px solid @border-color-base;
-        cursor: pointer;
-        transition: color 0.3s ease;
-
-        &:last-child {
-          border-bottom: none;
-        }
-
-        &:hover {
-          color: @primary-color;
-        }
-      }
-    }
-  }
+.error-page {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }

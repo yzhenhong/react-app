@@ -1,20 +1,16 @@
+/*
+ * @Author: yangzhenhong
+ * @Date: 2025-07-31 10:23:09
+ * @LastEditors: yangzhenhong
+ * @LastEditTime: 2025-09-09 14:10:03
+ * @FilePath: \react-app\src\pages\error\index.tsx
+ * @Description:
+ */
 import React from 'react';
 import './index.less';
 
 const Error: React.FC = () => {
-  return (
-    <div className='error-page'>
-      <h1 className='error-title'>错误页面</h1>
-      <div className='error-content'>
-        <p>这是错误页面的内容</p>
-        <ul className='error-list'>
-          <li>错误标题 1</li>
-          <li>错误标题 2</li>
-          <li>错误标题 3</li>
-        </ul>
-      </div>
-    </div>
-  );
+  return <div className='error-page'>error</div>;
 };
 
 export default Error;

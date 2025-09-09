@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-29 11:49:57
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-30 15:54:19
+ * @LastEditTime: 2025-09-09 14:27:40
  * @FilePath: \react-app\src\App.tsx
  * @Description:
  */
@@ -15,17 +15,14 @@
  * - 集成 Redux 状态管理
  */
 
-import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from '@/store';
-import AppRouter from '@/router/router';
+import AppRouter from '@/router';
 
 function App() {
   return (
     <Provider store={store}>
-      <div className='App'>
-        <AppRouter />
-      </div>
+      <AppRouter />
     </Provider>
   );
 }
