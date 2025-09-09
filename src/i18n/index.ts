@@ -14,19 +14,19 @@ import React from 'react';
 export type SupportedLanguage = 'zh' | 'en';
 
 // 导入模块化语言包
-import enCommon from './locales/en/common.json';
-import enNav from './locales/en/nav.json';
-import enPages from './locales/en/pages.json';
-import enLayout from './locales/en/layout.json';
-import enDemo from './locales/en/demo.json';
-import enLanguage from './locales/en/language.json';
+import enCommon from './en/common.json';
+import enNav from './en/nav.json';
+import enPages from './en/pages.json';
+import enLayout from './en/layout.json';
+import enDemo from './en/demo.json';
+import enLanguage from './en/language.json';
 
-import zhCommon from './locales/zh/common.json';
-import zhNav from './locales/zh/nav.json';
-import zhPages from './locales/zh/pages.json';
-import zhLayout from './locales/zh/layout.json';
-import zhDemo from './locales/zh/demo.json';
-import zhLanguage from './locales/zh/language.json';
+import zhCommon from './zh/common.json';
+import zhNav from './zh/nav.json';
+import zhPages from './zh/pages.json';
+import zhLayout from './zh/layout.json';
+import zhDemo from './zh/demo.json';
+import zhLanguage from './zh/language.json';
 
 // 合并语言包
 const en = {
