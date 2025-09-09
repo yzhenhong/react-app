@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-31 09:45:00
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-07-31 13:16:11
+ * @LastEditTime: 2025-09-09 13:55:07
  * @FilePath: \react-app\src\i18n\index.ts
  * @Description: 简化的多语言配置 - 整合所有功能
  */
@@ -63,7 +63,16 @@ const DEFAULT_LANGUAGE: SupportedLanguage = 'zh';
 const SUPPORTED_LANGUAGES: SupportedLanguage[] = ['zh', 'en'];
 
 /**
- * 获取存储的语言设置
+ * 获取当前语言（推荐使用）
+ * 返回 i18n 实例的实际语言设置
+ */
+export const getCurrentLanguage = (): SupportedLanguage => {
+  return i18n.language as SupportedLanguage;
+};
+
+/**
+ * 获取存储的语言设置（localStorage 中的用户偏好）
+ * @deprecated 建议使用 getCurrentLanguage()，除非需要明确区分存储状态
  */
 export const getStoredLanguage = (): SupportedLanguage => {
   try {
@@ -75,6 +84,15 @@ export const getStoredLanguage = (): SupportedLanguage => {
     console.warn('Failed to get stored language:', error);
     return DEFAULT_LANGUAGE;
   }
+};
+
+/**
+ * 获取语言设置（统一方法）
+ * 优先返回当前 i18n 语言，如果不可用则返回存储的语言
+ */
+export const getLanguage = (): SupportedLanguage => {
+  const currentLang = getCurrentLanguage();
+  return currentLang || getStoredLanguage();
 };
 
 /**
@@ -105,13 +123,6 @@ export const changeLanguage = async (
 };
 
 /**
- * 获取当前语言
- */
-export const getCurrentLanguage = (): SupportedLanguage => {
-  return i18n.language as SupportedLanguage;
-};
-
-/**
  * 获取支持的语言列表
  */
 export const getSupportedLanguages = (): SupportedLanguage[] => {
@@ -134,7 +145,7 @@ export const resetLanguage = (): void => {
 // i18n 配置
 i18n.use(initReactI18next).init({
   resources,
-  lng: getStoredLanguage(),
+  lng: getLanguage(),
   fallbackLng: 'en',
   interpolation: {
     escapeValue: false,

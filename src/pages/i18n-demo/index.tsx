@@ -4,7 +4,7 @@ import { Card, Typography, Space, Button, Divider, Alert, Tag } from 'antd';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import {
   useLanguageChange,
-  getCurrentLanguage,
+  getLanguage,
   getSupportedLanguages,
   resetLanguage,
 } from '@/i18n';
@@ -15,7 +15,7 @@ const { Title, Paragraph, Text } = Typography;
 const I18nDemo: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { isLoading, changeLanguage } = useLanguageChange();
-  const currentLanguage = getCurrentLanguage();
+  const currentLanguage = getLanguage();
 
   return (
     <div className='i18n-demo-page'>
