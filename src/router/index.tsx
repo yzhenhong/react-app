@@ -2,8 +2,8 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-30 15:45:00
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-08-01 08:59:41
- * @FilePath: \react-app\src\router\router.tsx
+ * @LastEditTime: 2025-09-10 10:40:51
+ * @FilePath: \react-app\src\router\index.tsx
  * @Description: 简化的路由配置 - 支持懒加载
  */
 

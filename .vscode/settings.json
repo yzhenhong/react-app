@@ -23,5 +23,8 @@
   "files.eol": "\n",
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
-  "files.trimTrailingWhitespace": true
+  "files.trimTrailingWhitespace": true,
+  "i18n-ally.localesPaths": [
+    "src/i18n"
+  ]
 }
