@@ -7,5 +7,6 @@
   "profile": "Profile",
   "settings": "Settings",
   "apiDemo": "API Demo",
-  "mockDemo": "Mock Demo"
+  "mockDemo": "Mock Demo",
+  "hooksDemo": "Hooks Demo"
 }

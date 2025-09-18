@@ -2,7 +2,7 @@
  * @Author: yangzhenhong
  * @Date: 2025-07-29 16:47:56
  * @LastEditors: yangzhenhong
- * @LastEditTime: 2025-08-12 10:31:32
+ * @LastEditTime: 2025-09-18 13:34:58
  * @FilePath: \react-app\src\components\Nav\index.tsx
  * @Description: 导航组件 - 支持多语言
  */
@@ -79,6 +79,12 @@ const Navigation: React.FC = () => {
           className={`nav-item ${location.pathname === '/mock-demo' ? 'active' : ''}`}
         >
           <Link to='/mock-demo'>{t('nav.mockDemo')}</Link>
+        </li>
+
+        <li
+          className={`nav-item ${location.pathname === '/hooks-demo' ? 'active' : ''}`}
+        >
+          <Link to='/hooks-demo'>{t('nav.hooksDemo')}</Link>
         </li>
       </ul>
 

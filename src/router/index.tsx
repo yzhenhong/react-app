@@ -128,6 +128,15 @@ export const routes: RouteConfig[] = [
           layout: 'default',
         },
       },
+      {
+        path: '/hooks-demo',
+        name: 'HooksDemo',
+        element: lazyLoad(() => import('@/pages/hooks-demo')),
+        meta: {
+          title: 'React Hooks 演示',
+          layout: 'default',
+        },
+      },
     ],
   },
   {

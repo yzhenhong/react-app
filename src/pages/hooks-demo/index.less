@@ -1,0 +1,212 @@
+/*
+ * @Author: yangzhenhong
+ * @Date: 2025-09-18 13:00:00
+ * @LastEditors: yangzhenhong
+ * @LastEditTime: 2025-09-18 13:00:00
+ * @FilePath: \react-app\src\pages\hooks-demo\index.less
+ * @Description: Hooks演示页面样式
+ */
+
+.hooks-demo {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #1890ff;
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  .ant-card {
+    margin-bottom: 16px;
+
+    .ant-card-head {
+      .ant-card-head-title {
+        font-weight: 600;
+        color: #52c41a;
+      }
+    }
+
+    .ant-card-body {
+      .ant-btn {
+        margin-right: 8px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
+      .ant-input {
+        margin-right: 8px;
+      }
+
+      p {
+        margin: 8px 0;
+        color: #666;
+      }
+
+      span {
+        color: #1890ff;
+        font-weight: 500;
+      }
+    }
+  }
+
+  // 特殊样式
+  .ant-card:nth-child(1) {
+    .ant-card-head-title {
+      color: #1890ff;
+    }
+  }
+
+  .ant-card:nth-child(2) {
+    .ant-card-head-title {
+      color: #722ed1;
+    }
+  }
+
+  .ant-card:nth-child(3) {
+    .ant-card-head-title {
+      color: #eb2f96;
+    }
+  }
+
+  .ant-card:nth-child(4) {
+    .ant-card-head-title {
+      color: #fa8c16;
+    }
+  }
+
+  .ant-card:nth-child(5) {
+    .ant-card-head-title {
+      color: #f5222d;
+    }
+  }
+
+  .ant-card:nth-child(6) {
+    .ant-card-head-title {
+      color: #13c2c2;
+    }
+  }
+
+  .ant-card:nth-child(7) {
+    .ant-card-head-title {
+      color: #52c41a;
+    }
+  }
+
+  .ant-card:nth-child(8) {
+    .ant-card-head-title {
+      color: #1890ff;
+    }
+  }
+
+  .ant-card:nth-child(9) {
+    .ant-card-head-title {
+      color: #722ed1;
+    }
+  }
+
+  .ant-card:nth-child(10) {
+    .ant-card-head-title {
+      color: #eb2f96;
+    }
+  }
+
+  // 响应式设计
+  @media (max-width: 768px) {
+    padding: 10px;
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .ant-space-vertical {
+      .ant-space-item {
+        margin-bottom: 12px !important;
+      }
+    }
+
+    .ant-card {
+      .ant-card-body {
+        .ant-btn {
+          margin-bottom: 8px;
+          width: 100%;
+        }
+
+        .ant-input {
+          width: 100% !important;
+          margin-bottom: 8px;
+        }
+
+        .ant-space-horizontal {
+          flex-direction: column;
+          align-items: stretch;
+
+          .ant-space-item {
+            margin-bottom: 8px;
+          }
+        }
+      }
+    }
+  }
+
+  // 动画效果
+  .ant-card {
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+  }
+
+  // 代码风格的提示文本
+  .ant-card-body p {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  // 数值显示样式
+  .ant-card-body span {
+    background: #f6ffed;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #b7eb8f;
+  }
+}
+
+// 全局主题样式
+.hooks-demo[data-theme='dark'] {
+  .ant-card {
+    background: #1f1f1f;
+    border-color: #434343;
+
+    .ant-card-head {
+      .ant-card-head-title {
+        color: #52c41a !important;
+      }
+    }
+
+    .ant-card-body {
+      p {
+        color: #d9d9d9;
+      }
+
+      span {
+        background: #162312;
+        border-color: #274916;
+        color: #52c41a;
+      }
+    }
+  }
+
+  h1 {
+    color: #1890ff;
+  }
+}

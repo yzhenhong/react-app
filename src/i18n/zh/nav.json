@@ -7,5 +7,6 @@
   "profile": "个人资料",
   "settings": "设置",
   "apiDemo": "API 演示",
-  "mockDemo": "Mock 演示"
+  "mockDemo": "Mock 演示",
+  "hooksDemo": "Hooks 演示"
 }
